@@ -10,4 +10,5 @@
     <string name="content_of_file">Content of</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_save">Save</string>
+    <string name="settings">Settings</string>
 </resources>
