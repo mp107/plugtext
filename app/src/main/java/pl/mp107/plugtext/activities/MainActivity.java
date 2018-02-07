@@ -31,9 +31,12 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        Intent intent;
+        
         switch (id) {
             case R.id.action_settings:
-                Toast.makeText(MainActivity.this,R.string.action_settings,Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_open_file:
                 Toast.makeText(MainActivity.this,R.string.action_open_file,Toast.LENGTH_SHORT).show();
