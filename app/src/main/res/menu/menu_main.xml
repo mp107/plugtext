@@ -4,6 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.mp107.textext.ui.activities.MainActivity">
     <item
+        android:id="@+id/action_back"
+        android:title="@string/action_back"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_menu_back" />
+    <item
+        android:id="@+id/action_forward"
+        android:title="@string/action_forward"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_menu_forward" />
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/action_search"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_menu_search" />
+    <item
         android:id="@+id/action_open_file"
         android:title="@string/action_open_file"
         app:showAsAction="ifRoom"
@@ -13,21 +28,6 @@
         android:title="@string/action_save_file"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_menu_save_file" />
-    <item
-        android:id="@+id/action_search"
-        android:title="@string/action_search"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_menu_search" />
-    <item
-        android:id="@+id/action_back"
-        android:title="@string/action_back"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_menu_back" />
-    <item
-        android:id="@+id/action_forward"
-        android:title="@string/action_forward"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_menu_forward" />
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
