@@ -8,4 +8,6 @@
     <string name="action_forward">Forward</string>
     <string name="action_back">Back</string>
     <string name="content_of_file">Content of</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
 </resources>

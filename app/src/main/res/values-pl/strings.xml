@@ -8,4 +8,6 @@
     <string name="action_back">Wróć</string>
     <string name="action_forward">Ponów</string>
     <string name="content_of_file">Zawartość pliku</string>
+    <string name="action_cancel">Anuluj</string>
+    <string name="action_save">Zapisz</string>
 </resources>
