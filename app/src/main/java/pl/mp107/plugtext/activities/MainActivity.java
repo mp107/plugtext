@@ -17,8 +17,10 @@ import com.rustamg.filedialogs.FileDialog;
 import com.rustamg.filedialogs.OpenFileDialog;
 import com.rustamg.filedialogs.SaveFileDialog;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 
 import pl.mp107.plugtext.R;
@@ -77,13 +79,10 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 return true;
             case R.id.action_open_file:
-                //Toast.makeText(MainActivity.this,R.string.action_open_file,Toast.LENGTH_SHORT).show();
-                // TODO
                 onOpenDialogClick();
                 return true;
             case R.id.action_save_file:
-                Toast.makeText(MainActivity.this,R.string.action_save_file,Toast.LENGTH_SHORT).show();
-                // TODO
+                onSaveDialogClick();
                 return true;
             case R.id.action_back:
                 Toast.makeText(MainActivity.this, R.string.action_back, Toast.LENGTH_SHORT).show();
@@ -157,7 +156,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void onSaveFileSelected(FileDialog dialog, File file) {
-        Toast.makeText(this, "Wybrano plik do zapisu " + file.getName() /*getString(R.string.toast_file_selected, file.getName())*/, Toast.LENGTH_LONG).show();
-        // TODO
+        try {
+            BufferedWriter bw = new BufferedWriter( new FileWriter(file));
+            bw.write(codeEditor.getCleanText());
+            bw.flush();
+            bw.close();
+        } catch (Exception e) {
+            Toast.makeText(this, "File saving failed", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void onSaveDialogClick() {
+        if (mStoragePermissionsGranted) {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            showFileDialog(saveFileDialog, SaveFileDialog.class.getName());
+        } else {
+            showStoragePermissionsError();
+        }
     }
 }
