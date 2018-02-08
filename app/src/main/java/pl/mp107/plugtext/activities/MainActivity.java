@@ -1,12 +1,20 @@
 package pl.mp107.plugtext.activities;
 
+import android.Manifest;
+import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.rustamg.filedialogs.FileDialog;
+import com.rustamg.filedialogs.OpenFileDialog;
 
 import java.io.InputStream;
 
@@ -16,6 +24,7 @@ import pl.mp107.plugtext.components.CodeEditor;
 public class MainActivity extends AppCompatActivity {
 
     private CodeEditor codeEditor;
+    private boolean mStoragePermissionsGranted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
             // e.printStackTrace();
             codeEditor.setText("Error: can't show help.");
         }
+
+        checkStoragePermissions();
     }
 
     @Override
@@ -58,8 +69,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.action_open_file:
-                Toast.makeText(MainActivity.this,R.string.action_open_file,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,R.string.action_open_file,Toast.LENGTH_SHORT).show();
                 // TODO
+                if (mStoragePermissionsGranted) {
+                    showFileDialog(new OpenFileDialog(), OpenFileDialog.class.getName());
+                } else {
+                    showStoragePermissionsError();
+                }
                 return true;
             case R.id.action_save_file:
                 Toast.makeText(MainActivity.this,R.string.action_save_file,Toast.LENGTH_SHORT).show();
@@ -80,5 +96,29 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void checkStoragePermissions() {
+        int writeStoragePermission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        int readStoragePermission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (writeStoragePermission == PackageManager.PERMISSION_GRANTED && readStoragePermission == PackageManager.PERMISSION_GRANTED) {
+            mStoragePermissionsGranted = true;
+        } else {
+            mStoragePermissionsGranted = false;
+        }
+    }
+
+    private void showStoragePermissionsError() {
+        // TODO
+        Toast.makeText(this, "Storage permission is not granted", Toast.LENGTH_LONG).show();
+    }
+
+    private void showFileDialog(FileDialog dialog, String tag) {
+        // TODO
+        dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
+        dialog.show(getSupportFragmentManager(), tag);
+
     }
 }
