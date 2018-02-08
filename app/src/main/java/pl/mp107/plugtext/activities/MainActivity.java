@@ -106,11 +106,7 @@ public class MainActivity extends AppCompatActivity
                 Manifest.permission.READ_EXTERNAL_STORAGE);
         int readStoragePermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (writeStoragePermission == PackageManager.PERMISSION_GRANTED && readStoragePermission == PackageManager.PERMISSION_GRANTED) {
-            mStoragePermissionsGranted = true;
-        } else {
-            mStoragePermissionsGranted = false;
-        }
+        mStoragePermissionsGranted = (writeStoragePermission == PackageManager.PERMISSION_GRANTED && readStoragePermission == PackageManager.PERMISSION_GRANTED)
     }
 
     private void showStoragePermissionsError() {
