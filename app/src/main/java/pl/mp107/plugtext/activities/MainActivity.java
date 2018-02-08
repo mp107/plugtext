@@ -26,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private CodeEditor codeEditor;
     private boolean mStoragePermissionsGranted;
 
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
