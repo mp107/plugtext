@@ -3,4 +3,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <!-- CodeEditor Component -->
+    <color name="background_item_pressed">#8222</color>
+    <color name="background_progress">#8000</color>
+    <color name="editor_text">#000</color>
+    <color name="syntax_error">#8800</color>
+    <color name="syntax_number">#7ba212</color>
+    <color name="syntax_keyword">#399ed7</color>
+    <color name="syntax_builtin">#d79e39</color>
+    <color name="syntax_comment">#808080</color>
+    <color name="crop_bound">#8fff</color>
+    <color name="cube_face_selected">#ffff</color>
+    <color name="cube_face_text">#fff</color>
 </resources>
