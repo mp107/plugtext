@@ -15,13 +15,17 @@ import android.widget.Toast;
 
 import com.rustamg.filedialogs.FileDialog;
 import com.rustamg.filedialogs.OpenFileDialog;
+import com.rustamg.filedialogs.SaveFileDialog;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 import pl.mp107.plugtext.R;
 import pl.mp107.plugtext.components.CodeEditor;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements FileDialog.OnFileSelectedListener {
 
     private CodeEditor codeEditor;
     private boolean mStoragePermissionsGranted;
@@ -75,11 +79,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_open_file:
                 //Toast.makeText(MainActivity.this,R.string.action_open_file,Toast.LENGTH_SHORT).show();
                 // TODO
-                if (mStoragePermissionsGranted) {
-                    showFileDialog(new OpenFileDialog(), OpenFileDialog.class.getName());
-                } else {
-                    showStoragePermissionsError();
-                }
+                onOpenDialogClick();
                 return true;
             case R.id.action_save_file:
                 Toast.makeText(MainActivity.this,R.string.action_save_file,Toast.LENGTH_SHORT).show();
@@ -123,6 +123,41 @@ public class MainActivity extends AppCompatActivity {
         // TODO
         dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
         dialog.show(getSupportFragmentManager(), tag);
+    }
 
+    protected void onOpenDialogClick() {
+        if (mStoragePermissionsGranted) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            showFileDialog(openFileDialog, OpenFileDialog.class.getName());
+        } else {
+            showStoragePermissionsError();
+        }
+    }
+
+    @Override
+    public void onFileSelected(FileDialog dialog, File file) {
+        if (dialog instanceof OpenFileDialog) {
+            onOpenFileSelected(dialog, file);
+        } else if (dialog instanceof SaveFileDialog) {
+            onSaveFileSelected(dialog, file);
+        }
+
+    }
+
+    private void onOpenFileSelected(FileDialog dialog, File file) {
+        // TODO
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            byte[] b = new byte[fis.available()];
+            fis.read(b);
+            codeEditor.setText(new String(b));
+        } catch (Exception e) {
+            codeEditor.setText("Error: can't show help.");
+        }
+    }
+
+    private void onSaveFileSelected(FileDialog dialog, File file) {
+        Toast.makeText(this, "Wybrano plik do zapisu " + file.getName() /*getString(R.string.toast_file_selected, file.getName())*/, Toast.LENGTH_LONG).show();
+        // TODO
     }
 }
