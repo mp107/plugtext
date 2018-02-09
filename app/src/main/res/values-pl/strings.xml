@@ -12,4 +12,9 @@
     <string name="action_save">Zapisz</string>
     <string name="settings">Ustawienia</string>
     <string name="language">Język</string>
+    <string name="regex_creator_exception">Błąd w przetwarzaniu i tworzeniu regexa</string>
+    <string name="plugin_load_exception">Błąd wczytywania wtyczki</string>
+    <string name="plugin_version_number_incorrect">Błędny numer wersji wtyczki</string>
+    <string name="plugin_file_parsing_exception">Błąd w składni pliku wtyczki</string>
+    <string name="plugin_api_version_mismatch">Wersja API wtyczki jest niezgodna</string>
 </resources>
