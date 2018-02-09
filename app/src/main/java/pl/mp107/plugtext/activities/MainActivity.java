@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity
             FileInputStream fis = new FileInputStream(file);
             byte[] b = new byte[fis.available()];
             fis.read(b);
+            fis.close();
             codeEditor.setText(new String(b));
         } catch (Exception e) {
             codeEditor.setText("Error: can't show help.");
