@@ -33,4 +33,9 @@
         android:title="@string/action_settings"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_menu_settings" />
+    <item
+        android:id="@+id/action_language"
+        android:title="@string/language"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_language" />
 </menu>

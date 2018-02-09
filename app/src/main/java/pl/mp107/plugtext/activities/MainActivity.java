@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, R.string.action_search, Toast.LENGTH_SHORT).show();
                 // TODO
                 return true;
+            case R.id.action_language:
+                Toast.makeText(MainActivity.this, R.string.language, Toast.LENGTH_SHORT).show();
+                // TODO
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
