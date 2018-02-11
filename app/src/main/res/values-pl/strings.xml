@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources><!--
     <string name="app_name">PlugText</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_open_file">Otwórz plik</string>
@@ -16,5 +16,5 @@
     <string name="plugin_load_exception">Błąd wczytywania wtyczki</string>
     <string name="plugin_version_number_incorrect">Błędny numer wersji wtyczki</string>
     <string name="plugin_file_parsing_exception">Błąd w składni pliku wtyczki</string>
-    <string name="plugin_api_version_mismatch">Wersja API wtyczki jest niezgodna</string>
+    <string name="plugin_api_version_mismatch">Wersja API wtyczki jest niezgodna</string>-->
 </resources>
