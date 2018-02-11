@@ -557,4 +557,36 @@ public class CodeEditor extends AppCompatEditText {
                 @NonNull Paint paint) {
         }
     }
+
+    public int getColorNumber() {
+        return colorNumber;
+    }
+
+    public void setColorNumber(int colorNumber) {
+        this.colorNumber = colorNumber;
+    }
+
+    public int getColorKeyword() {
+        return colorKeyword;
+    }
+
+    public void setColorKeyword(int colorKeyword) {
+        this.colorKeyword = colorKeyword;
+    }
+
+    public int getColorBuiltin() {
+        return colorBuiltin;
+    }
+
+    public void setColorBuiltin(int colorBuiltin) {
+        this.colorBuiltin = colorBuiltin;
+    }
+
+    public int getColorComment() {
+        return colorComment;
+    }
+
+    public void setColorComment(int colorComment) {
+        this.colorComment = colorComment;
+    }
 }
