@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference android:title="@string/pref_title_editor_plugin_db_update">
+        <!-- TODO -->
+    </Preference>
+    <Preference android:title="@string/pref_title_editor_background_color">
+        <!-- TODO -->
+    </Preference>
+    <Preference android:title="@string/pref_title_editor_bultins_color">
+        <!-- TODO -->
+    </Preference>
+    <Preference android:title="@string/pref_title_editor_comments_color">
+        <!-- TODO -->
+    </Preference>
+    <Preference android:title="@string/pref_title_editor_keywords_color">
+        <!-- TODO -->
+    </Preference>
+    <Preference android:title="@string/pref_title_editor_normal_text_color">
+        <!-- TODO -->
+    </Preference>
+    <Preference android:title="@string/pref_title_editor_numbers_color">
+        <!-- TODO -->
+    </Preference>
+    <Preference android:title="@string/pref_title_editor_preprocessors_color">
+        <!-- TODO -->
+    </Preference>
+</PreferenceScreen>

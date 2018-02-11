@@ -17,4 +17,33 @@
     <string name="plugin_version_number_incorrect">Incorrect plugin version</string>
     <string name="plugin_file_parsing_exception">Error in plugin syntax</string>
     <string name="plugin_api_version_mismatch">Plugin API version mismatch</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_general_language">Language</string>
+    <string name="pref_title_general_languages">Languages</string>
+    <string-array name="pref_general_list_languages">
+        <item>English</item>
+        <item>Polish</item>
+    </string-array>
+    <string-array name="pref_general_list_languages_values">
+        <item>en</item>
+        <item>pl</item>
+    </string-array>
+
+    <!-- Editor settings -->
+    <string name="pref_header_editor">Editor</string>
+
+    <string name="pref_title_editor_plugin_db_update">Update plugins database</string>
+    <string name="pref_title_editor_background_color">Background color</string>
+    <string name="pref_title_editor_bultins_color">Builtins color</string>
+    <string name="pref_title_editor_comments_color">Comments color</string>
+    <string name="pref_title_editor_keywords_color">Keywords color</string>
+    <string name="pref_title_editor_normal_text_color">Normal text color</string>
+    <string name="pref_title_editor_numbers_color">Numbers color</string>
+    <string name="pref_title_editor_preprocessors_color">Preprocessor directives color</string>
 </resources>
