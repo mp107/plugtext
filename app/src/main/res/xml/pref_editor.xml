@@ -3,25 +3,32 @@
     <Preference android:title="@string/pref_title_editor_plugin_db_update">
         <!-- TODO -->
     </Preference>
-    <Preference android:title="@string/pref_title_editor_background_color">
+    <Preference android:title="@string/pref_title_editor_background_color"
+        android:key="editor_background_color">
         <!-- TODO -->
     </Preference>
-    <Preference android:title="@string/pref_title_editor_bultins_color">
+    <Preference android:title="@string/pref_title_editor_bultins_color"
+        android:key="editor_builtins_color">
         <!-- TODO -->
     </Preference>
-    <Preference android:title="@string/pref_title_editor_comments_color">
+    <Preference android:title="@string/pref_title_editor_comments_color"
+        android:key="editor_comments_color">
         <!-- TODO -->
     </Preference>
-    <Preference android:title="@string/pref_title_editor_keywords_color">
+    <Preference android:title="@string/pref_title_editor_keywords_color"
+        android:key="editor_keywords_color">
         <!-- TODO -->
     </Preference>
-    <Preference android:title="@string/pref_title_editor_normal_text_color">
+    <Preference android:title="@string/pref_title_editor_normal_text_color"
+        android:key="editor_normal_text_color">
         <!-- TODO -->
     </Preference>
-    <Preference android:title="@string/pref_title_editor_numbers_color">
+    <Preference android:title="@string/pref_title_editor_numbers_color"
+        android:key="editor_numbers_color">
         <!-- TODO -->
     </Preference>
-    <Preference android:title="@string/pref_title_editor_preprocessors_color">
+    <Preference android:title="@string/pref_title_editor_preprocessors_color"
+        android:key="editor_preprocessors_color">
         <!-- TODO -->
     </Preference>
 </PreferenceScreen>

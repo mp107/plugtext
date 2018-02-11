@@ -3,21 +3,29 @@ package pl.mp107.plugtext.activities;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 
-import pl.mp107.plugtext.R;
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import java.util.List;
+
+import pl.mp107.plugtext.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -75,7 +83,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     }
                 }
 
-            } */else {
+            } */ else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
@@ -218,6 +226,43 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone")); //TODO - ?
+            final SharedPreferences sharedPreferences = this.getActivity().getPreferences(MODE_PRIVATE);
+
+            /* Handling clicks on preferences */
+            /* Editor background color */
+            setColorPickerBehaviour(sharedPreferences, "editor_background_color");
+            setColorPickerBehaviour(sharedPreferences, "editor_builtins_color");
+            setColorPickerBehaviour(sharedPreferences, "editor_comments_color");
+            setColorPickerBehaviour(sharedPreferences, "editor_keywords_color");
+            setColorPickerBehaviour(sharedPreferences, "editor_normal_text_color");
+            setColorPickerBehaviour(sharedPreferences, "editor_numbers_color");
+            setColorPickerBehaviour(sharedPreferences, "editor_preprocessors_color");
+
+        }
+
+        private void setColorPickerBehaviour(final SharedPreferences sharedPreferences, final String key) {
+            Preference pref = (Preference) findPreference(key);
+            pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    final int color = sharedPreferences.getInt(key, Integer.MIN_VALUE);
+                    int defaultColorR = 0, defaultColorG = 0, defaultColorB = 0;
+                    if (color != Integer.MIN_VALUE) {
+                        defaultColorR = Color.red(color);
+                        defaultColorG = Color.green(color);
+                        defaultColorB = Color.blue(color);
+                    }
+                    final ColorPicker cp = new ColorPicker(getActivity(), defaultColorR, defaultColorG, defaultColorB);
+                    cp.show();
+                    cp.setCallback(new ColorPickerCallback() {
+                        @Override
+                        public void onColorChosen(@ColorInt int color) {
+                            sharedPreferences.edit().putInt(key, color).apply();
+                            cp.cancel();
+                        }
+                    });
+                    return true;
+                }
+            });
         }
 
         @Override
