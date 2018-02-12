@@ -4,7 +4,7 @@ public abstract class TextFileApplicationPluginIdentifiers {
 
     /* General plugin attributes */
     public static final String PLUGIN_API_VERSION = "plugapi";
-    public static final String PLUGIN_AUTHOR = "plugauthor";
+    public static final String PLUGIN_AUTHOR = "plugauthors";
     public static final String PLUGIN_DESCRIPTION = "plugdescription";
     public static final String PLUGIN_NAME = "plugname";
     public static final String PLUGIN_VERSION_NUMBER = "plugversion";
