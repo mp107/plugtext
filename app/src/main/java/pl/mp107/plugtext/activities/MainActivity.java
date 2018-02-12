@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 
 import pl.mp107.plugtext.R;
@@ -159,7 +160,8 @@ public class MainActivity extends AppCompatActivity
         try {
             FileInputStream fis = new FileInputStream(file);
             byte[] b = new byte[fis.available()];
-            fis.read(b);
+            if (fis.read(b) == -1)
+                throw new IOException();
             fis.close();
             codeEditor.setText(new String(b));
         } catch (Exception e) {
