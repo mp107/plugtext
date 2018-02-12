@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
@@ -21,7 +20,6 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -303,29 +301,14 @@ public class CodeEditor extends AppCompatEditText {
             }
         });
 
-        setSyntaxColors(context);
+        setSyntaxColors();
         setUpdateDelay(1000/*ShaderEditorApp.preferences.getUpdateDelay()*/);
         setTabWidth(4/*ShaderEditorApp.preferences.getTabWidth()*/);
     }
 
-    private void setSyntaxColors(Context context) {/*
-        colorError = ContextCompat.getColor(
-                context,
-                R.color.syntax_error);
-        colorNumber = ContextCompat.getColor(
-                context,
-                R.color.syntax_number);
-        colorKeyword = ContextCompat.getColor(
-                context,
-                R.color.syntax_keyword);
-        colorBuiltin = ContextCompat.getColor(
-                context,
-                R.color.syntax_builtin);
-        colorComment = ContextCompat.getColor(
-                context,
-                R.color.syntax_comment);*/
-
+    private void setSyntaxColors() {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("settings", Context.MODE_MULTI_PROCESS);;
+        
         int newBackgroundColor = sharedPreferences.getInt("editor_background_color", Integer.MIN_VALUE);
         int newBuiltinsColor = sharedPreferences.getInt("editor_builtins_color", Integer.MIN_VALUE);
         int newCommentsColor = sharedPreferences.getInt("editor_comments_color", Integer.MIN_VALUE);
@@ -333,20 +316,7 @@ public class CodeEditor extends AppCompatEditText {
         int newNormalTextColor = sharedPreferences.getInt("editor_normal_text_color", Integer.MIN_VALUE);
         int newNumbersColor = sharedPreferences.getInt("editor_numbers_color", Integer.MIN_VALUE);
         int newPreprocessorsColor = sharedPreferences.getInt("editor_preprocessors_color", Integer.MIN_VALUE);
-        Log.d("DEBUGCE", "oldBackgroundColor" + String.format("#%06X", 0xFFFFFF & getColorBackground()));
-        Log.d("DEBUGCE", "newBackgroundColor" + String.format("#%06X", 0xFFFFFF & newBackgroundColor));
-        Log.d("DEBUGCE", "oldBuiltinsColor" + String.format("#%06X", 0xFFFFFF & getColorBuiltin()));
-        Log.d("DEBUGCE", "newBuiltinsColor" + String.format("#%06X", 0xFFFFFF & newBuiltinsColor));
-        Log.d("DEBUGCE", "oldCommentsColor" + String.format("#%06X", 0xFFFFFF & getColorComment()));
-        Log.d("DEBUGCE", "newCommentsColor" + String.format("#%06X", 0xFFFFFF & newCommentsColor));
-        Log.d("DEBUGCE", "oldKeywordsColor" + String.format("#%06X", 0xFFFFFF & getColorKeyword()));
-        Log.d("DEBUGCE", "newKeywordsColor" + String.format("#%06X", 0xFFFFFF & newKeywordsColor));
-        Log.d("DEBUGCE", "oldNormalTextColor" + String.format("#%06X", 0xFFFFFF & getColorNormalText()));
-        Log.d("DEBUGCE", "newNormalTextColor" + String.format("#%06X", 0xFFFFFF & newNormalTextColor));
-        Log.d("DEBUGCE", "oldNumbersColor" + String.format("#%06X", 0xFFFFFF & getColorNumber()));
-        Log.d("DEBUGCE", "newNumbersColor" + String.format("#%06X", 0xFFFFFF & newNumbersColor));
-        Log.d("DEBUGCE", "oldPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & getColorPreprocessors()));
-        Log.d("DEBUGCE", "newPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & newPreprocessorsColor));
+
         setColorBackground(newBackgroundColor);
         setColorBuiltin(newBuiltinsColor);
         setColorComment(newCommentsColor);
@@ -354,7 +324,6 @@ public class CodeEditor extends AppCompatEditText {
         setColorNormalText(newNormalTextColor);
         setColorNumber(newNumbersColor);
         setColorPreprocessors(newPreprocessorsColor);
-        //setText(getCleanText());
     }
 
     private void cancelUpdate() {
