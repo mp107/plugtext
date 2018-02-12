@@ -28,10 +28,6 @@ public abstract class BaseApplicationPlugin {
         this.patternNumbers = patternNumbers;
         this.patternPreprocessors = patternPreprocessors;
     }
-
-    public boolean isFileExtensionMatching(String fileName) {
-        return patternFileExtensions.matcher(fileName).matches();
-    }
 /*
     public boolean isFileContentMatching(String fileContent) {
         return
@@ -51,6 +47,10 @@ public abstract class BaseApplicationPlugin {
 
     public Pattern getPatternFileExtensions() {
         return patternFileExtensions;
+    }
+
+    public void setPatternFileExtensions(Pattern patternFileExtensions) {
+        this.patternFileExtensions = patternFileExtensions;
     }
 
     public Pattern getPatternKeywords() {

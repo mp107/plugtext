@@ -32,6 +32,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import pl.mp107.plugtext.R;
+import pl.mp107.plugtext.db.DatabaseHandler;
+import pl.mp107.plugtext.db.SyntaxSchema;
 import pl.mp107.plugtext.exceptions.ApplicationPluginException;
 import pl.mp107.plugtext.plugins.BaseApplicationPlugin;
 import pl.mp107.plugtext.utils.TextFileApplicationPluginUtil;
@@ -222,6 +224,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         };
                         Log.d("Updater", "Directories: " + Arrays.toString(additionalDirectories));
                         File[] pluginFiles;
+                        DatabaseHandler dbHandler = new DatabaseHandler(getActivity());
+                        dbHandler.clearDatabase();
                         for (String directoryPath : additionalDirectories) {
                             pluginFiles = getPlugins(directoryPath);
                             for (File pluginFile : pluginFiles) {
@@ -238,7 +242,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 try {
                                     BaseApplicationPlugin plugin = TextFileApplicationPluginUtil
                                             .createTextFileApplicationPluginFromString(fileContent);
-                                    // TODO - add plugin to plugin DB
+                                    // Adding syntax schema to db
+                                    dbHandler.addSyntaxSchema(
+                                            new SyntaxSchema(
+                                                    plugin.getPatternBuiltins().pattern(),
+                                                    plugin.getPatternComments().pattern(),
+                                                    plugin.getPatternFileExtensions().pattern(),
+                                                    plugin.getPatternKeywords().pattern(),
+                                                    plugin.getPatternLines().pattern(),
+                                                    plugin.getPatternNumbers().pattern(),
+                                                    plugin.getPatternPreprocessors().pattern(),
+                                                    plugin.getDescription(),
+                                                    plugin.getName(),
+                                                    plugin.getVersion()
+                                            )
+                                    );
                                     Log.i("PluginLoader", "Plugin " + plugin.getName() + " has been loaded successfully");
                                 } catch (ApplicationPluginException e) {
                                     Log.i("PluginLoader", "Plugin loading failed (ApplicationPluginException)");
