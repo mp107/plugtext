@@ -222,6 +222,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void refreshSyntaxColorsValues(CodeEditor editor) {
+        int newBackgroundColor = sharedPreferences.getInt("editor_background_color", Integer.MIN_VALUE);
+        int newBuiltinsColor = sharedPreferences.getInt("editor_builtins_color", Integer.MIN_VALUE);
+        int newCommentsColor = sharedPreferences.getInt("editor_comments_color", Integer.MIN_VALUE);
+        int newKeywordsColor = sharedPreferences.getInt("editor_keywords_color", Integer.MIN_VALUE);
+        int newNormalTextColor = sharedPreferences.getInt("editor_normal_text_color", Integer.MIN_VALUE);
+        int newNumbersColor = sharedPreferences.getInt("editor_numbers_color", Integer.MIN_VALUE);
+        int newPreprocessorsColor = sharedPreferences.getInt("editor_preprocessors_color", Integer.MIN_VALUE);
+
+        editor.setColorBackground(newBackgroundColor);
+        editor.setColorBuiltin(newBuiltinsColor);
+        editor.setColorComment(newCommentsColor);
+        editor.setColorKeyword(newKeywordsColor);
+        editor.setColorNormalText(newNormalTextColor);
+        editor.setColorNumber(newNumbersColor);
+        editor.setColorPreprocessors(newPreprocessorsColor);
         editor.setText(editor.getCleanText());
 
     }
