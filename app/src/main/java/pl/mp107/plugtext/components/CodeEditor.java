@@ -308,7 +308,7 @@ public class CodeEditor extends AppCompatEditText {
 
     private void setSyntaxColors() {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("settings", Context.MODE_MULTI_PROCESS);;
-        
+
         int newBackgroundColor = sharedPreferences.getInt("editor_background_color", Integer.MIN_VALUE);
         int newBuiltinsColor = sharedPreferences.getInt("editor_builtins_color", Integer.MIN_VALUE);
         int newCommentsColor = sharedPreferences.getInt("editor_comments_color", Integer.MIN_VALUE);
