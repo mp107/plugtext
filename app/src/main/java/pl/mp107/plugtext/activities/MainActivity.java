@@ -6,10 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import com.rustamg.filedialogs.SaveFileDialog;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity
 
         if (!sharedPreferences.getBoolean("first_run", false)) {
             storageInit();
+            initializePluginsDirectory();
             sharedPreferences.edit().putBoolean("first_run", true).apply();
         }
 
@@ -255,5 +258,50 @@ public class MainActivity extends AppCompatActivity
         editor.putInt("editor_numbers_color", DefaultSyntaxHighlightColors.editor_numbers_color);
         editor.putInt("editor_preprocessors_color", DefaultSyntaxHighlightColors.editor_preprocessors_color);
         editor.apply();
+    }
+
+    private void initializePluginsDirectory() {
+        /* Create plugins directory */
+        try {
+            String destinationDirectoryPath = getExternalFilesDir(null).getCanonicalPath() + "/plugins";
+            File sourceDirectory = new File(destinationDirectoryPath);
+            File destinationDirectory = new File(destinationDirectoryPath);
+
+            Log.i("PluginLoader", "Trying to create plugin directory in " + destinationDirectoryPath);
+            /* Create directory if not exists or is not a directory */
+            if (!destinationDirectory.exists() || !destinationDirectory.isDirectory()) {
+                destinationDirectory.mkdirs();
+            }
+            AssetManager assetManager = getAssets();
+            String[] sourcePluginsPaths = getAssets().list("plugins");
+            String destinationPluginFilePath = "";
+            /* For any of the source plugin files... */
+            for (String sourcePluginPath : sourcePluginsPaths) {
+                sourcePluginPath = "plugins/" + sourcePluginPath;
+                try {
+                    /* Read source file */
+                    File file = new File(sourcePluginPath);
+                    Log.i("PluginLoader", "Loading raw Asset: " + sourcePluginPath);
+                    InputStream is = getAssets().open(sourcePluginPath);
+                    byte[] b = new byte[is.available()];
+                    if (is.read(b) == -1)
+                        throw new IOException();
+                    is.close();
+                    /* Write content to destination file */
+                    destinationPluginFilePath = destinationDirectory + "/" + file.getName();
+                    Log.i("PluginLoader", "Writing raw Asset: " + destinationPluginFilePath);
+                    FileOutputStream out = new FileOutputStream(destinationPluginFilePath);
+                    out.write(b);
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    Log.w("PluginLoader", "Plugin loading failed (IOExcpetion)");
+                }
+            }
+        } catch (IOException e) {
+            Log.i("PluginLoader", "Directory creeating failed (IOExcpetion)");
+        } catch (NullPointerException e) {
+            Log.i("PluginLoader", "Directory creeating failed (NullPointerException)");
+        }
     }
 }
