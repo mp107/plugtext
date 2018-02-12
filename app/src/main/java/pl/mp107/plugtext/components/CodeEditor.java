@@ -2,7 +2,10 @@ package pl.mp107.plugtext.components;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -28,21 +31,21 @@ public class CodeEditor extends AppCompatEditText {
         void onTextChanged(String text);
     }
 
-    private Pattern PATTERN_LINE = Pattern.compile(
+    private Pattern patternLine = Pattern.compile(
             ".*\\n");
-    private Pattern PATTERN_NUMBERS = Pattern.compile(
+    private Pattern patternNumbers = Pattern.compile(
             "\\b(\\d*[.]?\\d+)\\b");
-    private Pattern PATTERN_PREPROCESSOR = Pattern.compile(
+    private Pattern patternPreprocessors = Pattern.compile(
             "^[\t ]*(#define|#undef|#if|#ifdef|#ifndef|#else|#elif|#endif|" +
                     "#error|#pragma|#extension|#version|#line)\\b",
             Pattern.MULTILINE);
-    private Pattern PATTERN_KEYWORDS = Pattern.compile(
+    private Pattern patternKeywords = Pattern.compile(
             "\\b(attribute|const|uniform|varying|break|continue|" +
                     "do|for|while|if|else|in|out|inout|float|int|void|bool|true|false|" +
                     "lowp|mediump|highp|precision|invariant|discard|return|mat2|mat3|" +
                     "mat4|vec2|vec3|vec4|ivec2|ivec3|ivec4|bvec2|bvec3|bvec4|sampler2D|" +
                     "samplerCube|struct|gl_Vertex|gl_FragCoord|gl_FragColor)\\b");
-    private Pattern PATTERN_BUILTINS = Pattern.compile(
+    private Pattern patternBuiltins = Pattern.compile(
             "\\b(radians|degrees|sin|cos|tan|asin|acos|atan|pow|" +
                     "exp|log|exp2|log2|sqrt|inversesqrt|abs|sign|floor|ceil|fract|mod|" +
                     "min|max|clamp|mix|step|smoothstep|length|distance|dot|cross|" +
@@ -50,7 +53,7 @@ public class CodeEditor extends AppCompatEditText {
                     "lessThanEqual|greaterThan|greaterThanEqual|equal|notEqual|any|all|" +
                     "not|dFdx|dFdy|fwidth|texture2D|texture2DProj|texture2DLod|" +
                     "texture2DProjLod|textureCube|textureCubeLod)\\b");
-    private Pattern PATTERN_COMMENTS = Pattern.compile(
+    private Pattern patternComments = Pattern.compile(
             "/\\*(?:.|[\\n\\r])*?\\*/|//.*");
     private Pattern PATTERN_TRAILING_WHITE_SPACE = Pattern.compile(
             "[\\t ]+$",
@@ -84,6 +87,7 @@ public class CodeEditor extends AppCompatEditText {
     private int colorError;
     private int colorNumber;
     private int colorKeyword;
+    private int colorPreprocessors;
     private int colorBuiltin;
     private int colorComment;
     private int tabWidthInCharacters = 0;
@@ -343,7 +347,7 @@ public class CodeEditor extends AppCompatEditText {
             }
 
             if (errorLine > 0) {
-                Matcher m = PATTERN_LINE.matcher(e);
+                Matcher m = patternLine.matcher(e);
 
                 for (int i = errorLine; i-- > 0 && m.find(); ) {
                     // {} because analyzers don't like for (); statements
@@ -356,7 +360,7 @@ public class CodeEditor extends AppCompatEditText {
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            for (Matcher m = PATTERN_NUMBERS.matcher(e); m.find(); ) {
+            for (Matcher m = patternNumbers.matcher(e); m.find(); ) {
                 e.setSpan(
                         new ForegroundColorSpan(colorNumber),
                         m.start(),
@@ -364,7 +368,15 @@ public class CodeEditor extends AppCompatEditText {
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            for (Matcher m = PATTERN_PREPROCESSOR.matcher(e); m.find(); ) {
+            for (Matcher m = patternPreprocessors.matcher(e); m.find(); ) {
+                e.setSpan(
+                        new ForegroundColorSpan(colorPreprocessors),
+                        m.start(),
+                        m.end(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            for (Matcher m = patternKeywords.matcher(e); m.find(); ) {
                 e.setSpan(
                         new ForegroundColorSpan(colorKeyword),
                         m.start(),
@@ -372,15 +384,7 @@ public class CodeEditor extends AppCompatEditText {
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            for (Matcher m = PATTERN_KEYWORDS.matcher(e); m.find(); ) {
-                e.setSpan(
-                        new ForegroundColorSpan(colorKeyword),
-                        m.start(),
-                        m.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-
-            for (Matcher m = PATTERN_BUILTINS.matcher(e); m.find(); ) {
+            for (Matcher m = patternBuiltins.matcher(e); m.find(); ) {
                 e.setSpan(
                         new ForegroundColorSpan(colorBuiltin),
                         m.start(),
@@ -388,7 +392,7 @@ public class CodeEditor extends AppCompatEditText {
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            for (Matcher m = PATTERN_COMMENTS.matcher(e); m.find(); ) {
+            for (Matcher m = patternComments.matcher(e); m.find(); ) {
                 e.setSpan(
                         new ForegroundColorSpan(colorComment),
                         m.start(),
@@ -564,6 +568,7 @@ public class CodeEditor extends AppCompatEditText {
 
     public void setColorNumber(int colorNumber) {
         this.colorNumber = colorNumber;
+        dirty = true;
     }
 
     public int getColorKeyword() {
@@ -588,5 +593,80 @@ public class CodeEditor extends AppCompatEditText {
 
     public void setColorComment(int colorComment) {
         this.colorComment = colorComment;
+    }
+    public int getColorBackground() {
+        int color = Color.TRANSPARENT;
+        Drawable background = getBackground();
+        if (background instanceof ColorDrawable)
+            color = ((ColorDrawable) background).getColor();
+        return color;
+    }
+
+    public void setColorBackground(int color) {
+        this.setBackgroundColor(color);
+    }
+
+    public int getColorNormalText() {
+        return this.getCurrentTextColor();
+    }
+
+    public void setColorNormalText(int color) {
+        this.setTextColor(color);
+    }
+
+    public int getColorPreprocessors() {
+        return colorPreprocessors;
+    }
+
+    public void setColorPreprocessors(int colorPreprocessors) {
+        this.colorPreprocessors = colorPreprocessors;
+    }
+
+    public Pattern getPatternLine() {
+        return patternLine;
+    }
+
+    public void setPatternLine(Pattern patternLine) {
+        this.patternLine = patternLine;
+    }
+
+    public Pattern getPatternNumbers() {
+        return patternNumbers;
+    }
+
+    public void setPatternNumbers(Pattern patternNumbers) {
+        this.patternNumbers = patternNumbers;
+    }
+
+    public Pattern getPatternPreprocessors() {
+        return patternPreprocessors;
+    }
+
+    public void setPatternPreprocessors(Pattern patternPreprocessors) {
+        this.patternPreprocessors = patternPreprocessors;
+    }
+
+    public Pattern getPatternKeywords() {
+        return patternKeywords;
+    }
+
+    public void setPatternKeywords(Pattern patternKeywords) {
+        this.patternKeywords = patternKeywords;
+    }
+
+    public Pattern getPatternBuiltins() {
+        return patternBuiltins;
+    }
+
+    public void setPatternBuiltins(Pattern patternBuiltins) {
+        this.patternBuiltins = patternBuiltins;
+    }
+
+    public Pattern getPatternComments() {
+        return patternComments;
+    }
+
+    public void setPatternComments(Pattern patternComments) {
+        this.patternComments = patternComments;
     }
 }

@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <!-- CodeEditor Component -->
-    <color name="background_editor">#00ffffff</color>
+    <color name="background_editor">#00000000</color>
     <color name="background_item_pressed">#8222</color>
     <color name="background_progress">#8000</color>
     <color name="editor_text">#000</color>
