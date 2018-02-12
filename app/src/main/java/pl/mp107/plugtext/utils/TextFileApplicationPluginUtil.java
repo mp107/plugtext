@@ -111,7 +111,7 @@ public abstract class TextFileApplicationPluginUtil {
     private static String[] getAuthorsList(Map<String, String> pluginConfig) {
         try {
             String authorsValue = pluginConfig.get(TextFileApplicationPluginIdentifiers.PLUGIN_AUTHOR);
-            if (authorsValue.indexOf(",") > -1)
+            if (authorsValue.contains(","))
                 return authorsValue.split(",");
             return new String[]{authorsValue};
         } catch (NullPointerException e) {
@@ -120,11 +120,17 @@ public abstract class TextFileApplicationPluginUtil {
     }
 
     private static String getName(Map<String, String> pluginConfig) {
-        return pluginConfig.get(TextFileApplicationPluginIdentifiers.PLUGIN_NAME);
+        String value = pluginConfig.get(TextFileApplicationPluginIdentifiers.PLUGIN_NAME);
+        if (value == null)
+            return "";
+        return value;
     }
 
     private static String getDescription(Map<String, String> pluginConfig) {
-        return pluginConfig.get(TextFileApplicationPluginIdentifiers.PLUGIN_DESCRIPTION);
+        String value = pluginConfig.get(TextFileApplicationPluginIdentifiers.PLUGIN_DESCRIPTION);
+        if (value == null)
+            return "";
+        return value;
     }
 
     private static int getPluginVersion(Map<String, String> pluginConfig) {
