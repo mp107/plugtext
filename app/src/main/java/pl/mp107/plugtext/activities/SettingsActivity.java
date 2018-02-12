@@ -226,7 +226,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone")); //TODO - ?
-            final SharedPreferences sharedPreferences = this.getActivity().getPreferences(MODE_PRIVATE);
+            final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", Context.MODE_MULTI_PROCESS);
 
             /* Handling clicks on preferences */
             /* Editor background color */
@@ -257,6 +257,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         @Override
                         public void onColorChosen(@ColorInt int color) {
                             sharedPreferences.edit().putInt(key, color).apply();
+                            Log.d("DEBUG", "Saved color value="+String.format("#%06X", 0xFFFFFF & color)+" for " + key);
                             cp.cancel();
                         }
                     });

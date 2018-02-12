@@ -2,6 +2,7 @@ package pl.mp107.plugtext.activities;
 
 import android.Manifest;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -44,23 +45,19 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sharedPreferences = getPreferences(MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("settings", Context.MODE_MULTI_PROCESS);
 
         if (!sharedPreferences.getBoolean("first_run", false)) {
-            storageSetup();
+            storageInit();
             sharedPreferences.edit().putBoolean("first_run", true).apply();
         }
 
-        codeEditor = (CodeEditor)findViewById(R.id.editor);
-
-        refreshSyntaxColorsValues(codeEditor);
-
+        codeEditor = (CodeEditor) findViewById(R.id.editor);
         try {
             Resources res = getResources();
             InputStream in_s = res.openRawResource(R.raw.java_code);
             byte[] b = new byte[in_s.available()];
             in_s.read(b);
-            refreshSyntaxColorsValues(codeEditor);
             codeEditor.setText(new String(b));
         } catch (Exception e) {
             // e.printStackTrace();
@@ -85,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         Intent intent;
-        
+
         switch (id) {
             case R.id.action_settings:
                 intent = new Intent(this, SettingsActivity.class);
@@ -100,7 +97,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_back:
                 Toast.makeText(MainActivity.this, R.string.action_back, Toast.LENGTH_SHORT).show();
                 // TODO
-                refreshSyntaxColorsValues(codeEditor);
                 return true;
             case R.id.action_forward:
                 Toast.makeText(MainActivity.this, R.string.action_forward, Toast.LENGTH_SHORT).show();
@@ -174,7 +170,7 @@ public class MainActivity extends AppCompatActivity
 
     private void onSaveFileSelected(FileDialog dialog, File file) {
         try {
-            BufferedWriter bw = new BufferedWriter( new FileWriter(file));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             bw.write(codeEditor.getCleanText());
             bw.flush();
             bw.close();
@@ -193,17 +189,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        if (haveSyntaxColorsChanged(codeEditor)) {
-            refreshSyntaxColorsValues(codeEditor);
-            Log.d("DEBUG" , "Syntax colors changed: true");
-        }
-        else
-            Log.d("DEBUG" , "Syntax colors changed: false");
-    }
 
-    private boolean haveSyntaxColorsChanged(CodeEditor editor) {
+        int oldBackgroundColor = codeEditor.getColorBackground();
+        int oldBuiltinsColor = codeEditor.getColorBuiltin();
+        int oldCommentsColor = codeEditor.getColorComment();
+        int oldKeywordsColor = codeEditor.getColorKeyword();
+        int oldNormalTextColor = codeEditor.getColorNormalText();
+        int oldNumbersColor = codeEditor.getColorNumber();
+        int oldPreprocessorsColor = codeEditor.getColorPreprocessors();
+
         int newBackgroundColor = sharedPreferences.getInt("editor_background_color", Integer.MIN_VALUE);
         int newBuiltinsColor = sharedPreferences.getInt("editor_builtins_color", Integer.MIN_VALUE);
         int newCommentsColor = sharedPreferences.getInt("editor_comments_color", Integer.MIN_VALUE);
@@ -211,37 +207,43 @@ public class MainActivity extends AppCompatActivity
         int newNormalTextColor = sharedPreferences.getInt("editor_normal_text_color", Integer.MIN_VALUE);
         int newNumbersColor = sharedPreferences.getInt("editor_numbers_color", Integer.MIN_VALUE);
         int newPreprocessorsColor = sharedPreferences.getInt("editor_preprocessors_color", Integer.MIN_VALUE);
-
-        return (newBackgroundColor != editor.getColorBackground()
-        || newBuiltinsColor != editor.getColorBuiltin()
-        || newCommentsColor != editor.getColorComment()
-        || newKeywordsColor != editor.getColorKeyword()
-        || newNormalTextColor != editor.getColorNormalText()
-        || newNumbersColor != editor.getColorNumber()
-        || newPreprocessorsColor != editor.getColorPreprocessors());
+/*
+        Log.d("DEBUG", "oldBackgroundColor" + String.format("#%06X", 0xFFFFFF & oldBackgroundColor));
+        Log.d("DEBUG", "newBackgroundColor" + String.format("#%06X", 0xFFFFFF & newBackgroundColor));
+        Log.d("DEBUG", "oldBuiltinsColor" + String.format("#%06X", 0xFFFFFF & oldBuiltinsColor));
+        Log.d("DEBUG", "newBuiltinsColor" + String.format("#%06X", 0xFFFFFF & newBuiltinsColor));
+        Log.d("DEBUG", "oldCommentsColor" + String.format("#%06X", 0xFFFFFF & oldCommentsColor));
+        Log.d("DEBUG", "newCommentsColor" + String.format("#%06X", 0xFFFFFF & newCommentsColor));
+        Log.d("DEBUG", "oldKeywordsColor" + String.format("#%06X", 0xFFFFFF & oldKeywordsColor));
+        Log.d("DEBUG", "newKeywordsColor" + String.format("#%06X", 0xFFFFFF & newKeywordsColor));
+        Log.d("DEBUG", "oldNormalTextColor" + String.format("#%06X", 0xFFFFFF & oldNormalTextColor));
+        Log.d("DEBUG", "newNormalTextColor" + String.format("#%06X", 0xFFFFFF & newNormalTextColor));
+        Log.d("DEBUG", "oldNumbersColor" + String.format("#%06X", 0xFFFFFF & oldNumbersColor));
+        Log.d("DEBUG", "newNumbersColor" + String.format("#%06X", 0xFFFFFF & newNumbersColor));
+        Log.d("DEBUG", "oldPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & oldPreprocessorsColor));
+        Log.d("DEBUG", "newPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & newPreprocessorsColor));
+*/
+        if (newBackgroundColor != oldBackgroundColor
+                || newBuiltinsColor != oldBuiltinsColor
+                || newCommentsColor != oldCommentsColor
+                || newKeywordsColor != oldKeywordsColor
+                || newNormalTextColor != oldNormalTextColor
+                || newNumbersColor != oldNumbersColor
+                || newPreprocessorsColor != oldPreprocessorsColor) {
+            codeEditor.setColorBackground(newBackgroundColor);
+            codeEditor.setColorBuiltin(newBuiltinsColor);
+            codeEditor.setColorComment(newCommentsColor);
+            codeEditor.setColorKeyword(newKeywordsColor);
+            codeEditor.setColorNormalText(newNormalTextColor);
+            codeEditor.setColorNumber(newNumbersColor);
+            codeEditor.setColorPreprocessors(newPreprocessorsColor);
+            codeEditor.refreshSyntaxHighlight();
+            //Log.d("DEBUG", "Syntax colors changed: true");
+        }/* else
+            Log.d("DEBUG", "Syntax colors changed: false");*/
     }
 
-    private void refreshSyntaxColorsValues(CodeEditor editor) {
-        int newBackgroundColor = sharedPreferences.getInt("editor_background_color", Integer.MIN_VALUE);
-        int newBuiltinsColor = sharedPreferences.getInt("editor_builtins_color", Integer.MIN_VALUE);
-        int newCommentsColor = sharedPreferences.getInt("editor_comments_color", Integer.MIN_VALUE);
-        int newKeywordsColor = sharedPreferences.getInt("editor_keywords_color", Integer.MIN_VALUE);
-        int newNormalTextColor = sharedPreferences.getInt("editor_normal_text_color", Integer.MIN_VALUE);
-        int newNumbersColor = sharedPreferences.getInt("editor_numbers_color", Integer.MIN_VALUE);
-        int newPreprocessorsColor = sharedPreferences.getInt("editor_preprocessors_color", Integer.MIN_VALUE);
-
-        editor.setColorBackground(newBackgroundColor);
-        editor.setColorBuiltin(newBuiltinsColor);
-        editor.setColorComment(newCommentsColor);
-        editor.setColorKeyword(newKeywordsColor);
-        editor.setColorNormalText(newNormalTextColor);
-        editor.setColorNumber(newNumbersColor);
-        editor.setColorPreprocessors(newPreprocessorsColor);
-        editor.setText(editor.getCleanText());
-
-    }
-
-    private void storageSetup() {
+    private void storageInit() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("editor_background_color", DefaultSyntaxHighlightColors.editor_background_color);
         editor.putInt("editor_builtins_color", DefaultSyntaxHighlightColors.editor_builtins_color);
