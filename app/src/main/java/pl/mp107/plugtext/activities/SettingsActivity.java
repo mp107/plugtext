@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -26,7 +25,6 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -244,11 +242,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     Log.i("PluginLoader", "Plugin " + plugin.getName() + " has been loaded successfully");
                                 } catch (ApplicationPluginException e) {
                                     Log.i("PluginLoader", "Plugin loading failed (ApplicationPluginException)");
+                                } catch (NullPointerException e) {
+                                    Log.i("PluginLoader", "Plugin loading failed (NullPointerException)");
                                 }
                             }
                         }
                     } catch (IOException e) {
-                        Log.i("PluginLoader", "Plugin loading failed (IOExcpetion)");
+                        Log.i("PluginLoader", "Plugins loading failed (IOException)");
                     }
                     Toast.makeText(getActivity(), R.string.plugins_loaded_successfully, Toast.LENGTH_LONG).show();
                     return true;
