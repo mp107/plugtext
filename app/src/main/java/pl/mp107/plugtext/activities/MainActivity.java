@@ -58,11 +58,11 @@ public class MainActivity extends AppCompatActivity
             Resources res = getResources();
             InputStream in_s = res.openRawResource(R.raw.java_code);
             byte[] b = new byte[in_s.available()];
-            in_s.read(b);
+            if (in_s.read(b) == -1)
+                throw new IOException();
             codeEditor.setText(new String(b));
         } catch (Exception e) {
-            // e.printStackTrace();
-            codeEditor.setText("Error: can't show help.");
+            Toast.makeText(this, R.string.file_saving_failed, Toast.LENGTH_LONG).show();
         }
 
         checkStoragePermissions();
