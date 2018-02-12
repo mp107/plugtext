@@ -19,6 +19,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
@@ -249,6 +250,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     } catch (IOException e) {
                         Log.i("PluginLoader", "Plugin loading failed (IOExcpetion)");
                     }
+                    Toast.makeText(getActivity(), R.string.plugins_loaded_successfully, Toast.LENGTH_LONG).show();
                     return true;
                 }
 
