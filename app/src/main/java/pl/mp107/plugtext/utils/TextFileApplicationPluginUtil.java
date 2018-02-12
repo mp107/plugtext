@@ -1,6 +1,7 @@
 package pl.mp107.plugtext.utils;
 
 import android.content.res.Resources;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +84,7 @@ public abstract class TextFileApplicationPluginUtil {
         Scanner scanner = new Scanner(content);
         while (scanner.hasNextLine()) {
             line = scanner.nextLine();
+            Log.d("TFAPUtil", "Scaning line: " + line);
             /* If line is not empty and does not start with # (comment) */
             if (!line.isEmpty() && !line.startsWith("#")) {
                 separatorPosition = line.indexOf("=");
@@ -91,8 +93,10 @@ public abstract class TextFileApplicationPluginUtil {
                     value = line.substring(separatorPosition + 1);
                     pluginConfig.put(name, value);
                 } else {
-                    throw new ApplicationPluginException(
-                            Resources.getSystem().getString(R.string.plugin_file_parsing_exception));
+                    Log.w("TFAPUtil", "");
+                    throw new ApplicationPluginException("Error in plugin syntax"/*
+                            Resources.getSystem().getString(R.string.plugin_file_parsing_exception)*/);
+
                 }
             }
         }
@@ -105,7 +109,14 @@ public abstract class TextFileApplicationPluginUtil {
     }
 
     private static String[] getAuthorsList(Map<String, String> pluginConfig) {
-        return pluginConfig.get(TextFileApplicationPluginIdentifiers.PLUGIN_AUTHOR).split(",");
+        try {
+            String authorsValue = pluginConfig.get(TextFileApplicationPluginIdentifiers.PLUGIN_AUTHOR);
+            if (authorsValue.indexOf(",") > -1)
+                return authorsValue.split(",");
+            return new String[]{authorsValue};
+        } catch (NullPointerException e) {
+            return new String[]{};
+        }
     }
 
     private static String getName(Map<String, String> pluginConfig) {

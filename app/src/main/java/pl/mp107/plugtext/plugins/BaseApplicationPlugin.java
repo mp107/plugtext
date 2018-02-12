@@ -68,4 +68,32 @@ public abstract class BaseApplicationPlugin {
     public Pattern getPatternPreprocessors() {
         return patternPreprocessors;
     }
+
+    public String[] getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(String[] authors) {
+        this.authors = authors;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }

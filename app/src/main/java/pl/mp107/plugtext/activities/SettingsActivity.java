@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -18,14 +19,23 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import pl.mp107.plugtext.R;
+import pl.mp107.plugtext.exceptions.ApplicationPluginException;
+import pl.mp107.plugtext.plugins.BaseApplicationPlugin;
+import pl.mp107.plugtext.utils.TextFileApplicationPluginUtil;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -195,6 +205,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("settings", Context.MODE_MULTI_PROCESS);
 
             /* Handling clicks on preferences */
+            /* Colors */
             setColorPickerBehaviour(sharedPreferences, "editor_background_color");
             setColorPickerBehaviour(sharedPreferences, "editor_builtins_color");
             setColorPickerBehaviour(sharedPreferences, "editor_comments_color");
@@ -202,6 +213,60 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setColorPickerBehaviour(sharedPreferences, "editor_normal_text_color");
             setColorPickerBehaviour(sharedPreferences, "editor_numbers_color");
             setColorPickerBehaviour(sharedPreferences, "editor_preprocessors_color");
+            /* DB Update */
+            Preference pref = (Preference) findPreference("editor_plugin_db_update");
+            pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    try {
+                        String[] additionalDirectories = {
+                                getActivity().getExternalFilesDir(null).getCanonicalPath() + "/plugins"
+                        };
+                        Log.d("Updater", "Directories: " + Arrays.toString(additionalDirectories));
+                        File[] pluginFiles;
+                        for (String directoryPath : additionalDirectories) {
+                            pluginFiles = getPlugins(directoryPath);
+                            for (File pluginFile : pluginFiles) {
+                                Log.d("Updater", "Plugin file: " + pluginFile.getCanonicalPath());
+                                BufferedReader br = new BufferedReader(new FileReader(pluginFile));
+                                StringBuilder sb = new StringBuilder();
+                                String line = br.readLine();
+                                while (line != null) {
+                                    sb.append(line);
+                                    sb.append(System.lineSeparator());
+                                    line = br.readLine();
+                                }
+                                String fileContent = sb.toString();
+                                try {
+                                    BaseApplicationPlugin plugin = TextFileApplicationPluginUtil
+                                            .createTextFileApplicationPluginFromString(fileContent);
+                                    // TODO - add plugin to plugin DB
+                                    Log.i("PluginLoader", "Plugin " + plugin.getName() + " has been loaded successfully");
+                                } catch (ApplicationPluginException e) {
+                                    Log.i("PluginLoader", "Plugin loading failed (ApplicationPluginException)");
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.i("PluginLoader", "Plugin loading failed (IOExcpetion)");
+                    }
+                    return true;
+                }
+
+                private File[] getPlugins(String path) {
+                    File directory = new File(path);
+                    File[] files = {};
+                    if (directory.exists() && directory.isDirectory() && directory.canRead()) {
+                        files = directory.listFiles(
+                                new FilenameFilter() {
+                                    public boolean accept(File dir, String filename) {
+                                        return filename.toUpperCase().endsWith(".PLU");
+                                    }
+                                }
+                        );
+                    }
+                    return files;
+                }
+            });
 
         }
 
