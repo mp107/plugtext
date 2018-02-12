@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void onOpenFileSelected(FileDialog dialog, File file) {
-        // TODO
         try {
             FileInputStream fis = new FileInputStream(file);
             byte[] b = new byte[fis.available()];
@@ -164,7 +163,8 @@ public class MainActivity extends AppCompatActivity
             fis.close();
             codeEditor.setText(new String(b));
         } catch (Exception e) {
-            codeEditor.setText("Error: can't show help.");
+            codeEditor.setText("");
+            Toast.makeText(this, R.string.file_opening_failed, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
             bw.flush();
             bw.close();
         } catch (Exception e) {
-            Toast.makeText(this, "File saving failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.file_saving_failed, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -18,6 +18,8 @@
     <string name="plugin_file_parsing_exception">Error in plugin syntax</string>
     <string name="plugin_api_version_mismatch">Plugin API version mismatch</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="file_opening_failed">File opening failed</string>
+    <string name="file_saving_failed">File saving failed</string>
 
     <!-- Strings related to Settings -->
 
