@@ -126,6 +126,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return schema;
     }
 
+    public SyntaxSchema getSyntaxSchemaByName(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.query(TABLE_SYNTAX_SCHEMAS,
+                new String[]{
+                        KEY_SYNTAX_SCHEMAS_ID, KEY_SYNTAX_SCHEMAS_NAME, KEY_SYNTAX_SCHEMAS_DESCRIPTION,
+                        KEY_SYNTAX_SCHEMAS_PATTERN_BUILTINS, KEY_SYNTAX_SCHEMAS_PATTERN_COMMENTS, KEY_SYNTAX_SCHEMAS_PATTERN_FILE_EXTENSIONS,
+                        KEY_SYNTAX_SCHEMAS_PATTERN_KEYWORDS, KEY_SYNTAX_SCHEMAS_PATTERN_LINES, KEY_SYNTAX_SCHEMAS_PATTERN_NUMBERS,
+                        KEY_SYNTAX_SCHEMAS_PATTERN_PREPROCESSORS, KEY_SYNTAX_SCHEMAS_VERSION
+                }, KEY_SYNTAX_SCHEMAS_NAME + "=?",
+                new String[]{name}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        SyntaxSchema schema = new SyntaxSchema(
+                Integer.parseInt(cursor.getString(0)),
+                cursor.getString(3),
+                cursor.getString(4),
+                cursor.getString(5),
+                cursor.getString(6),
+                cursor.getString(7),
+                cursor.getString(8),
+                cursor.getString(9),
+                cursor.getString(2),
+                cursor.getString(1),
+                Integer.parseInt(cursor.getString(10))
+        );
+        return schema;
+    }
+
     public List<SyntaxSchema> getAllSyntaxSchemas() {
         List<SyntaxSchema> syntaxSchemasList = new ArrayList<SyntaxSchema>();
 
