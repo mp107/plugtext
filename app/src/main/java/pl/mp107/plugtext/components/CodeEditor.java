@@ -359,46 +359,50 @@ public class CodeEditor extends AppCompatEditText {
                         m.end(),
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
+            if (patternNumbers != null)
+                for (Matcher m = patternNumbers.matcher(e); m.find(); ) {
+                    e.setSpan(
+                            new ForegroundColorSpan(colorNumber),
+                            m.start(),
+                            m.end(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
 
-            for (Matcher m = patternNumbers.matcher(e); m.find(); ) {
-                e.setSpan(
-                        new ForegroundColorSpan(colorNumber),
-                        m.start(),
-                        m.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+            if (patternPreprocessors != null)
+                for (Matcher m = patternPreprocessors.matcher(e); m.find(); ) {
+                    e.setSpan(
+                            new ForegroundColorSpan(colorPreprocessors),
+                            m.start(),
+                            m.end(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
 
-            for (Matcher m = patternPreprocessors.matcher(e); m.find(); ) {
-                e.setSpan(
-                        new ForegroundColorSpan(colorPreprocessors),
-                        m.start(),
-                        m.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+            if (patternKeywords != null)
+                for (Matcher m = patternKeywords.matcher(e); m.find(); ) {
+                    e.setSpan(
+                            new ForegroundColorSpan(colorKeyword),
+                            m.start(),
+                            m.end(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
 
-            for (Matcher m = patternKeywords.matcher(e); m.find(); ) {
-                e.setSpan(
-                        new ForegroundColorSpan(colorKeyword),
-                        m.start(),
-                        m.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+            if (patternBuiltins != null)
+                for (Matcher m = patternBuiltins.matcher(e); m.find(); ) {
+                    e.setSpan(
+                            new ForegroundColorSpan(colorBuiltin),
+                            m.start(),
+                            m.end(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
 
-            for (Matcher m = patternBuiltins.matcher(e); m.find(); ) {
-                e.setSpan(
-                        new ForegroundColorSpan(colorBuiltin),
-                        m.start(),
-                        m.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-
-            for (Matcher m = patternComments.matcher(e); m.find(); ) {
-                e.setSpan(
-                        new ForegroundColorSpan(colorComment),
-                        m.start(),
-                        m.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+            if (patternComments != null)
+                for (Matcher m = patternComments.matcher(e); m.find(); ) {
+                    e.setSpan(
+                            new ForegroundColorSpan(colorComment),
+                            m.start(),
+                            m.end(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
         } catch (IllegalStateException ex) {
             // raised by Matcher.start()/.end() when
             // no successful match has been made what

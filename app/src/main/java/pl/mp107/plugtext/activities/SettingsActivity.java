@@ -25,9 +25,11 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -230,7 +232,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             pluginFiles = getPlugins(directoryPath);
                             for (File pluginFile : pluginFiles) {
                                 Log.d("Updater", "Plugin file: " + pluginFile.getCanonicalPath());
-                                BufferedReader br = new BufferedReader(new FileReader(pluginFile));
+                                BufferedReader br = new BufferedReader(
+                                        new InputStreamReader(
+                                                new FileInputStream(pluginFile), "UTF8"));
                                 StringBuilder sb = new StringBuilder();
                                 String line = br.readLine();
                                 while (line != null) {

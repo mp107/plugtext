@@ -51,9 +51,9 @@ public abstract class TextFileApplicationPluginUtil {
                         TextFileApplicationPluginIdentifiers.PLUGIN_FILE_LINES_REGEX,
                         ApplicationPluginDefaultValues.PLUGIN_FILE_LINES_REGEX);
                 Pattern numbers = getPattern(pluginConfig,
-                        TextFileApplicationPluginIdentifiers.PLUGIN_FILE_LINES_LIST,
-                        TextFileApplicationPluginIdentifiers.PLUGIN_FILE_LINES_REGEX,
-                        ApplicationPluginDefaultValues.PLUGIN_FILE_LINES_REGEX);
+                        TextFileApplicationPluginIdentifiers.PLUGIN_FILE_NUMBERS_LIST,
+                        TextFileApplicationPluginIdentifiers.PLUGIN_FILE_NUMBERS_REGEX,
+                        ApplicationPluginDefaultValues.PLUGIN_FILE_NUMBERS_REGEX);
                 Pattern preprocessors = getPattern(pluginConfig,
                         TextFileApplicationPluginIdentifiers.PLUGIN_FILE_PREPROCESSORS_LIST,
                         TextFileApplicationPluginIdentifiers.PLUGIN_FILE_PREPROCESSORS_REGEX,

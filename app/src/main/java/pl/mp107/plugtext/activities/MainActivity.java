@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -31,6 +32,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import pl.mp107.plugtext.R;
 import pl.mp107.plugtext.components.CodeEditor;
@@ -126,12 +128,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showLanguagesSelectingIntent() {
-        DatabaseHandler dbHandler = new DatabaseHandler(this);
+        final DatabaseHandler dbHandler = new DatabaseHandler(this);
 
         List<SyntaxSchema> schemas = dbHandler.getAllSyntaxSchemas();
 
         /* Language names */
-        String[] languagesListLabels = new String[schemas.size() + 1];
+        final String[] languagesListLabels = new String[schemas.size() + 1];
 
         /* Language IDs */
         String[] languagesListValues = new String[schemas.size() + 1];
@@ -145,10 +147,40 @@ public class MainActivity extends AppCompatActivity
         builder.setItems(languagesListLabels, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // the user clicked on colors[which]
+                SyntaxSchema schema = null;
+                if (which != 0)
+                    schema = dbHandler.getSyntaxSchemaByName(languagesListLabels[which]);
+                setSyntaxSchemaForEditor(codeEditor, schema);
             }
         });
         builder.show();
+    }
+
+    private void setSyntaxSchemaForEditor(CodeEditor codeEditor, @Nullable SyntaxSchema schema) {
+        if (schema == null) {
+            // Disable syntax highlighting
+            codeEditor.setPatternBuiltins(null);
+            codeEditor.setPatternComments(null);
+            codeEditor.setPatternKeywords(null);
+            codeEditor.setPatternNumbers(null);
+            codeEditor.setPatternPreprocessors(null);
+            codeEditor.refreshSyntaxHighlight();
+        }
+        else {
+            // Enable syntax highlighting and set patterns
+            codeEditor.setPatternBuiltins(Pattern.compile(schema.getPatternBuiltins()));
+            codeEditor.setPatternComments(Pattern.compile(schema.getPatternComments()));
+            codeEditor.setPatternKeywords(Pattern.compile(schema.getPatternKeywords()));
+            codeEditor.setPatternNumbers(Pattern.compile(schema.getPatternNumbers()));
+            codeEditor.setPatternPreprocessors(Pattern.compile(schema.getPatternPreprocessors()));
+            codeEditor.refreshSyntaxHighlight();
+
+            Log.d("SyntaxSET", "Builtins: " + schema.getPatternBuiltins());
+            Log.d("SyntaxSET", "Comments: " + schema.getPatternComments());
+            Log.d("SyntaxSET", "Keywords: " + schema.getPatternKeywords());
+            Log.d("SyntaxSET", "Numbers: " + schema.getPatternNumbers());
+            Log.d("SyntaxSET", "Preprocessors: " + schema.getPatternPreprocessors());
+        }
     }
 
     private void checkStoragePermissions() {
