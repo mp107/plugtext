@@ -112,8 +112,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         SyntaxSchema schema = new SyntaxSchema(
                 Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1),
-                cursor.getString(2),
                 cursor.getString(3),
                 cursor.getString(4),
                 cursor.getString(5),
@@ -121,6 +119,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cursor.getString(7),
                 cursor.getString(8),
                 cursor.getString(9),
+                cursor.getString(2),
+                cursor.getString(1),
                 Integer.parseInt(cursor.getString(10))
         );
         return schema;
@@ -147,8 +147,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 SyntaxSchema schema = new SyntaxSchema(
                         Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(1),
-                        cursor.getString(2),
                         cursor.getString(3),
                         cursor.getString(4),
                         cursor.getString(5),
@@ -156,6 +154,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         cursor.getString(7),
                         cursor.getString(8),
                         cursor.getString(9),
+                        cursor.getString(2),
+                        cursor.getString(1),
                         Integer.parseInt(cursor.getString(10))
                 );
                 // Adding contact to list
