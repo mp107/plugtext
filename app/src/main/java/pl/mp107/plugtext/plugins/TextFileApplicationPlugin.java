@@ -1,7 +1,6 @@
 package pl.mp107.plugtext.plugins;
 
 
-import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class TextFileApplicationPlugin extends BaseApplicationPlugin {

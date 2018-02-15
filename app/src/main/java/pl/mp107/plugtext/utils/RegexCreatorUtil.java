@@ -1,11 +1,9 @@
 package pl.mp107.plugtext.utils;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 import pl.mp107.plugtext.exceptions.RegexCreatorException;
 
@@ -28,8 +26,8 @@ public abstract class RegexCreatorUtil {
             result.setLength(result.length() - 1);
         }
         result.append(")\\b");
-        Log.d("REGEXCreatorUtil", "Input List: " + string);
-        Log.d("REGEXCreatorUtil", "Created REGEX: " + result.toString());
+        //Log.d("REGEXCreatorUtil", "Input List: " + string);
+        //Log.d("REGEXCreatorUtil", "Created REGEX: " + result.toString());
         return result.toString();
     }
 }

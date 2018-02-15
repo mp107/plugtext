@@ -171,7 +171,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         KEY_SYNTAX_SCHEMAS_PATTERN_KEYWORDS, KEY_SYNTAX_SCHEMAS_PATTERN_LINES, KEY_SYNTAX_SCHEMAS_PATTERN_NUMBERS,
                         KEY_SYNTAX_SCHEMAS_PATTERN_PREPROCESSORS, KEY_SYNTAX_SCHEMAS_VERSION
                 }, null, null, null, null, null);
-        //Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {

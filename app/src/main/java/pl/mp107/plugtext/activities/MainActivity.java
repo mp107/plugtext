@@ -165,8 +165,7 @@ public class MainActivity extends AppCompatActivity
             codeEditor.setPatternNumbers(null);
             codeEditor.setPatternPreprocessors(null);
             codeEditor.refreshSyntaxHighlight();
-        }
-        else {
+        } else {
             // Enable syntax highlighting and set patterns
             codeEditor.setPatternBuiltins(Pattern.compile(schema.getPatternBuiltins()));
             codeEditor.setPatternComments(Pattern.compile(schema.getPatternComments()));
@@ -174,12 +173,13 @@ public class MainActivity extends AppCompatActivity
             codeEditor.setPatternNumbers(Pattern.compile(schema.getPatternNumbers()));
             codeEditor.setPatternPreprocessors(Pattern.compile(schema.getPatternPreprocessors()));
             codeEditor.refreshSyntaxHighlight();
-
+/*
             Log.d("SyntaxSET", "Builtins: " + schema.getPatternBuiltins());
             Log.d("SyntaxSET", "Comments: " + schema.getPatternComments());
             Log.d("SyntaxSET", "Keywords: " + schema.getPatternKeywords());
             Log.d("SyntaxSET", "Numbers: " + schema.getPatternNumbers());
             Log.d("SyntaxSET", "Preprocessors: " + schema.getPatternPreprocessors());
+*/
         }
     }
 

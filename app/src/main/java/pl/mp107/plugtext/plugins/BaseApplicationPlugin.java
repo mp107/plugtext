@@ -28,11 +28,7 @@ public abstract class BaseApplicationPlugin {
         this.patternNumbers = patternNumbers;
         this.patternPreprocessors = patternPreprocessors;
     }
-/*
-    public boolean isFileContentMatching(String fileContent) {
-        return
-    }
-*/
+
     public int getVersion() {
         return version;
     }
