@@ -1,7 +1,5 @@
 package pl.mp107.plugtext.db;
 
-import java.util.regex.Pattern;
-
 public class SyntaxSchema {
     private int _id;
     private String patternBuiltins;
@@ -34,7 +32,7 @@ public class SyntaxSchema {
         this.version = version;
     }
 
-    public SyntaxSchema(String patternBuiltins, String patternComments,String patternFileExtensions, String patternKeywords, String patternLines, String patternNumbers, String patternPreprocessors, String description, String name, int version) {
+    public SyntaxSchema(String patternBuiltins, String patternComments, String patternFileExtensions, String patternKeywords, String patternLines, String patternNumbers, String patternPreprocessors, String description, String name, int version) {
         this.patternBuiltins = patternBuiltins;
         this.patternComments = patternComments;
         this.patternFileExtensions = patternFileExtensions;
@@ -133,5 +131,10 @@ public class SyntaxSchema {
 
     public void setPatternFileExtensions(String patternFileExtensions) {
         this.patternFileExtensions = patternFileExtensions;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + get_id() + "] " + getName() + " - " + getDescription() + ", by " + "TODO" + "...";
     }
 }
