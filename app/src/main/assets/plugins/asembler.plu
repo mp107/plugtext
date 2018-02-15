@@ -1,0 +1,16 @@
+plugapi=1
+plugauthors=mp107
+plugname=Asembler NASM
+plugdescription=Asembler NASM Syntax Highlight Plugin
+plugversion=1
+
+fileextensions-list=asm
+comments-regex=/\*(?:.|[\n\r])*?\*/|//.|;.*
+numbers-regex=\b((\$?([\dA-Fa-f]+[xXhHoOqQ]?))|(0[xXhHoOqQ][\dA-Fa-f]+)|(0[bByY][0-1]+_?[0-1]+)|([0-1]+_?[0-1]+[bByY]))\b
+preprocessors-list=%define,%macro,func
+builtins-list=mov,seg,call,push,pop,times,jne,ret,global,section,SECTION,extern,lea
+keywords-list=db,dd,dq,dw,resb,resd,resq,resy,resz,incbin,db,equ,dword,zword,__float8__,__float16__,__float32__,__float64__,__float80m__,__float80e__,__float128l__,__float128h__,al,ah,ax,eax,bl,bh,bx,ebx,cl,ch,cx,ecx,dl,dh,dx,edx,bp,di,rax,rbx
+
+# Sources:
+# http://www.nasm.us/doc/nasmdoc3.html
+# https://en.wikibooks.org/wiki/X86_Assembly/NASM_Syntax
