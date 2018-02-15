@@ -171,7 +171,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public SyntaxSchema getSyntaxSchemaByFileExtension(String fileExtension) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        List<SyntaxSchema> syntaxSchemasList =  getAllSyntaxSchemas();
+        List<SyntaxSchema> syntaxSchemasList = getAllSyntaxSchemas();
 
         for (SyntaxSchema schema : syntaxSchemasList) {
             if (Pattern.compile(schema.getPatternFileExtensions()).matcher(fileExtension).matches())

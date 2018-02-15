@@ -21,6 +21,7 @@
     <string name="file_opening_failed">File opening failed</string>
     <string name="file_saving_failed">File saving failed</string>
     <string name="plugins_loaded_successfully">Plugins reloaded successfully</string>
+    <string name="language_none">None</string>
 
     <!-- Strings related to Settings -->
 

@@ -1,8 +1,10 @@
 package pl.mp107.plugtext.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -28,13 +30,17 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import pl.mp107.plugtext.R;
 import pl.mp107.plugtext.components.CodeEditor;
 import pl.mp107.plugtext.constants.DefaultSyntaxHighlightColors;
+import pl.mp107.plugtext.db.DatabaseHandler;
+import pl.mp107.plugtext.db.SyntaxSchema;
 
 public class MainActivity extends AppCompatActivity
         implements FileDialog.OnFileSelectedListener {
+
 
     private CodeEditor codeEditor;
     private boolean mStoragePermissionsGranted;
@@ -112,11 +118,37 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.action_language:
                 Toast.makeText(MainActivity.this, R.string.language, Toast.LENGTH_SHORT).show();
-                // TODO
+                showLanguagesSelectingIntent();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showLanguagesSelectingIntent() {
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
+
+        List<SyntaxSchema> schemas = dbHandler.getAllSyntaxSchemas();
+
+        /* Language names */
+        String[] languagesListLabels = new String[schemas.size() + 1];
+
+        /* Language IDs */
+        String[] languagesListValues = new String[schemas.size() + 1];
+        languagesListLabels[0] = getResources().getString(R.string.language_none);
+        for (int i = 0; i < schemas.size(); i++) {
+            languagesListLabels[i + 1] = schemas.get(i).getName();
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.language));
+        builder.setItems(languagesListLabels, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on colors[which]
+            }
+        });
+        builder.show();
     }
 
     private void checkStoragePermissions() {

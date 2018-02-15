@@ -37,5 +37,6 @@
         android:id="@+id/action_language"
         android:title="@string/language"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_language" />
+        android:icon="@drawable/ic_language"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
 </menu>
