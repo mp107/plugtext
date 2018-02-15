@@ -31,28 +31,28 @@ public class CodeEditor extends AppCompatEditText {
 
     private Pattern patternLine = Pattern.compile(
             ".*\\n");
-    private Pattern patternNumbers = Pattern.compile(
-            "\\b(\\d*[.]?\\d+)\\b");
-    private Pattern patternPreprocessors = Pattern.compile(
+    private Pattern patternNumbers = null/*Pattern.compile(
+            "\\b(\\d*[.]?\\d+)\\b")*/;
+    private Pattern patternPreprocessors = null/*Pattern.compile(
             "^[\t ]*(#define|#undef|#if|#ifdef|#ifndef|#else|#elif|#endif|" +
                     "#error|#pragma|#extension|#version|#line)\\b",
-            Pattern.MULTILINE);
-    private Pattern patternKeywords = Pattern.compile(
+            Pattern.MULTILINE)*/;
+    private Pattern patternKeywords = null/*Pattern.compile(
             "\\b(attribute|const|uniform|varying|break|continue|" +
                     "do|for|while|if|else|in|out|inout|float|int|void|bool|true|false|" +
                     "lowp|mediump|highp|precision|invariant|discard|return|mat2|mat3|" +
                     "mat4|vec2|vec3|vec4|ivec2|ivec3|ivec4|bvec2|bvec3|bvec4|sampler2D|" +
-                    "samplerCube|struct|gl_Vertex|gl_FragCoord|gl_FragColor)\\b");
-    private Pattern patternBuiltins = Pattern.compile(
+                    "samplerCube|struct|gl_Vertex|gl_FragCoord|gl_FragColor)\\b")*/;
+    private Pattern patternBuiltins = null/*Pattern.compile(
             "\\b(radians|degrees|sin|cos|tan|asin|acos|atan|pow|" +
                     "exp|log|exp2|log2|sqrt|inversesqrt|abs|sign|floor|ceil|fract|mod|" +
                     "min|max|clamp|mix|step|smoothstep|length|distance|dot|cross|" +
                     "normalize|faceforward|reflect|refract|matrixCompMult|lessThan|" +
                     "lessThanEqual|greaterThan|greaterThanEqual|equal|notEqual|any|all|" +
                     "not|dFdx|dFdy|fwidth|texture2D|texture2DProj|texture2DLod|" +
-                    "texture2DProjLod|textureCube|textureCubeLod)\\b");
-    private Pattern patternComments = Pattern.compile(
-            "/\\*(?:.|[\\n\\r])*?\\*/|//.*");
+                    "texture2DProjLod|textureCube|textureCubeLod)\\b")*/;
+    private Pattern patternComments = null/*Pattern.compile(
+            "/\\*(?:.|[\\n\\r])*?\\*//*|//.*")*/;
     private Pattern PATTERN_TRAILING_WHITE_SPACE = Pattern.compile(
             "[\\t ]+$",
             Pattern.MULTILINE);
