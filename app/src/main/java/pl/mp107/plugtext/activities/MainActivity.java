@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity
         }
 
         codeEditor = (CodeEditor) findViewById(R.id.editor);
+        codeEditor.setText("");
+/*
         try {
             Resources res = getResources();
             InputStream in_s = res.openRawResource(R.raw.java_code);
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             Toast.makeText(this, R.string.file_saving_failed, Toast.LENGTH_LONG).show();
         }
-
+*/
         checkStoragePermissions();
     }
 
