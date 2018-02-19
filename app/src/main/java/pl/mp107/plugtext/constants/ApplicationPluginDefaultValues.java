@@ -29,8 +29,8 @@ public abstract class ApplicationPluginDefaultValues {
             ".*\\n");
     public static final Pattern PLUGIN_FILE_NUMBERS_REGEX = Pattern.compile(
             "\\b(\\d*[.]?\\d+)\\b");
-    public static final Pattern PLUGIN_FILE_PREPROCESSORS_REGEX = Pattern.compile(
+    public static final Pattern PLUGIN_FILE_PREPROCESSORS_REGEX = null/*Pattern.compile(
             "^[\t ]*(#define|#undef|#if|#ifdef|#ifndef|#else|#elif|#endif|" +
                     "#error|#pragma|#extension|#version|#line)\\b",
-            Pattern.MULTILINE);
+            Pattern.MULTILINE)*/;
 }
