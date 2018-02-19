@@ -1,20 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><!--
+<resources>
     <string name="app_name">PlugText</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_open_file">Otwórz plik</string>
-    <string name="action_save_file">Zapisz plik</string>
+    <string name="action_save_file">Zapisz Plik</string>
     <string name="action_search">Szukaj</string>
-    <string name="action_back">Wróć</string>
     <string name="action_forward">Ponów</string>
-    <string name="content_of_file">Zawartość pliku</string>
+    <string name="action_back">Cofnij</string>
+    <string name="content_of_file">Zawartość pliku </string>
     <string name="action_cancel">Anuluj</string>
     <string name="action_save">Zapisz</string>
     <string name="settings">Ustawienia</string>
     <string name="language">Język</string>
-    <string name="regex_creator_exception">Błąd w przetwarzaniu i tworzeniu regexa</string>
-    <string name="plugin_load_exception">Błąd wczytywania wtyczki</string>
-    <string name="plugin_version_number_incorrect">Błędny numer wersji wtyczki</string>
-    <string name="plugin_file_parsing_exception">Błąd w składni pliku wtyczki</string>
-    <string name="plugin_api_version_mismatch">Wersja API wtyczki jest niezgodna</string>-->
+    <string name="regex_creator_exception">Błąd we wczytywaniu i tworzeniu wyrażenia regularnego</string>
+    <string name="plugin_load_exception">Błąd ładowania wtyczki</string>
+    <string name="plugin_version_number_incorrect">Nieprawidłowa wersja wtyczki</string>
+    <string name="plugin_file_parsing_exception">Błąd składni wtyczki</string>
+    <string name="plugin_api_version_mismatch">Wersja API wtyczki nie zgadza się</string>
+    <string name="title_activity_settings">Ustawienia</string>
+    <string name="file_opening_failed">Otwarcie pliku nie powiodło się</string>
+    <string name="file_saving_failed">Zapis do pliku nie powiódł się</string>
+    <string name="plugins_loaded_successfully">Wtyczki wczytano pomyślnie</string>
+    <string name="language_none">Brak</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- General settings -->
+    <string name="pref_header_general">Ogólne</string>
+
+    <string name="pref_title_general_language">Język</string>
+    <string name="pref_title_general_languages">Języki</string>
+    <string-array name="pref_general_list_languages">
+        <item>English</item>
+        <item>Polski</item>
+    </string-array>
+    <string-array name="pref_general_list_languages_values">
+        <item>en</item>
+        <item>pl</item>
+    </string-array>
+
+    <!-- Editor settings -->
+    <string name="pref_header_editor">Edytor</string>
+
+    <string name="pref_title_editor_plugin_db_update">Odśwież bazę wtyczek</string>
+    <string name="pref_title_editor_background_color">Kolor tła</string>
+    <string name="pref_title_editor_bultins_color">Kolor słów wbudowanych</string>
+    <string name="pref_title_editor_comments_color">Kolor komentarzy</string>
+    <string name="pref_title_editor_keywords_color">Kolor słów kluczowych</string>
+    <string name="pref_title_editor_normal_text_color">Kolor zwykłego tekstu</string>
+    <string name="pref_title_editor_numbers_color">Kolor wartości liczbowych</string>
+    <string name="pref_title_editor_preprocessors_color">Kolor dyrektyw preprocesora</string>
 </resources>
