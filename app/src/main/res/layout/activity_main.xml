@@ -12,7 +12,8 @@
         tools:ignore="Overdraw"
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
         <pl.mp107.plugtext.components.CodeEditor
             android:id="@+id/editor"
             android:layout_width="match_parent"
