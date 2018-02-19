@@ -169,12 +169,38 @@ public class MainActivity extends AppCompatActivity
             codeEditor.setPatternPreprocessors(null);
             codeEditor.refreshSyntaxHighlight();
         } else {
+            String patternBuiltinsString = schema.getPatternBuiltins();
+            String patternCommentsString = schema.getPatternComments();
+            String patternFileExtensionString = schema.getPatternFileExtensions();
+            String patternKeywordsString = schema.getPatternKeywords();
+            String patternNumbersString = schema.getPatternNumbers();
+            String patternPreprocessorsString = schema.getPatternPreprocessors();
+
+            Pattern patternBuiltins = null;
+            Pattern patternComments = null;
+            Pattern patternFileExtension = null;
+            Pattern patternKeywords = null;
+            Pattern patternNumbers = null;
+            Pattern patternPreprocessors = null;
+            if (patternBuiltinsString != null && !patternBuiltinsString.equals(""))
+                patternBuiltins = Pattern.compile(patternBuiltinsString);
+            if (patternCommentsString != null && !patternCommentsString.equals(""))
+                patternComments = Pattern.compile(patternCommentsString);
+            if (patternFileExtensionString != null && !patternFileExtensionString.equals(""))
+                patternFileExtension = Pattern.compile(patternFileExtensionString);
+            if (patternKeywordsString != null && !patternKeywordsString.equals(""))
+                patternKeywords = Pattern.compile(patternKeywordsString);
+            if (patternNumbersString != null && !patternNumbersString.equals(""))
+                patternNumbers = Pattern.compile(patternNumbersString);
+            if (patternPreprocessorsString != null && !patternPreprocessorsString.equals(""))
+                patternPreprocessors = Pattern.compile(patternPreprocessorsString);
+
             // Enable syntax highlighting and set patterns
-            codeEditor.setPatternBuiltins(Pattern.compile(schema.getPatternBuiltins()));
-            codeEditor.setPatternComments(Pattern.compile(schema.getPatternComments()));
-            codeEditor.setPatternKeywords(Pattern.compile(schema.getPatternKeywords()));
-            codeEditor.setPatternNumbers(Pattern.compile(schema.getPatternNumbers()));
-            codeEditor.setPatternPreprocessors(Pattern.compile(schema.getPatternPreprocessors()));
+            codeEditor.setPatternBuiltins(patternBuiltins);
+            codeEditor.setPatternComments(patternComments);
+            codeEditor.setPatternKeywords(patternKeywords);
+            codeEditor.setPatternNumbers(patternNumbers);
+            codeEditor.setPatternPreprocessors(patternPreprocessors);
             codeEditor.refreshSyntaxHighlight();
 /*
             Log.d("SyntaxSET", "Builtins: " + schema.getPatternBuiltins());

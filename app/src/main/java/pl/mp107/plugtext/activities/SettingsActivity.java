@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import pl.mp107.plugtext.R;
 import pl.mp107.plugtext.db.DatabaseHandler;
@@ -246,15 +247,45 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     BaseApplicationPlugin plugin = TextFileApplicationPluginUtil
                                             .createTextFileApplicationPluginFromString(fileContent);
                                     // Adding syntax schema to db
+                                    Pattern patternBuiltins = plugin.getPatternBuiltins();
+                                    Pattern patternComments = plugin.getPatternComments();
+                                    Pattern patternFileExtension = plugin.getPatternFileExtensions();
+                                    Pattern patternKeywords = plugin.getPatternKeywords();
+                                    Pattern patternLines = plugin.getPatternLines();
+                                    Pattern patternNumbers = plugin.getPatternNumbers();
+                                    Pattern patternPreprocessors = plugin.getPatternPreprocessors();
+
+                                    String patternBuiltinsString = null;
+                                    String patternCommentsString = null;
+                                    String patternFileExtensionString = null;
+                                    String patternKeywordsString = null;
+                                    String patternLinesString = null;
+                                    String patternNumbersString = null;
+                                    String patternPreprocessorsString = null;
+                                    if (patternBuiltins != null)
+                                        patternBuiltinsString = patternBuiltins.pattern();
+                                    if (patternComments != null)
+                                        patternCommentsString = patternComments.pattern();
+                                    if (patternFileExtension != null)
+                                        patternFileExtensionString = patternFileExtension.pattern();
+                                    if (patternKeywords != null)
+                                        patternKeywordsString = patternKeywords.pattern();
+                                    if (patternLines != null)
+                                        patternLinesString = patternLines.pattern();
+                                    if (patternNumbers != null)
+                                        patternNumbersString = patternNumbers.pattern();
+                                    if (patternPreprocessors != null)
+                                        patternPreprocessorsString = patternPreprocessors.pattern();
+
                                     dbHandler.addSyntaxSchema(
                                             new SyntaxSchema(
-                                                    plugin.getPatternBuiltins().pattern(),
-                                                    plugin.getPatternComments().pattern(),
-                                                    plugin.getPatternFileExtensions().pattern(),
-                                                    plugin.getPatternKeywords().pattern(),
-                                                    plugin.getPatternLines().pattern(),
-                                                    plugin.getPatternNumbers().pattern(),
-                                                    plugin.getPatternPreprocessors().pattern(),
+                                                    patternBuiltinsString,
+                                                    patternCommentsString,
+                                                    patternFileExtensionString,
+                                                    patternKeywordsString,
+                                                    patternLinesString,
+                                                    patternNumbersString,
+                                                    patternPreprocessorsString,
                                                     plugin.getDescription(),
                                                     plugin.getName(),
                                                     plugin.getVersion()
