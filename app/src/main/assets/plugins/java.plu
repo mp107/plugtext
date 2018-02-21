@@ -7,6 +7,6 @@ plugversion=1
 # comment...
 fileextensions-list=java
 numbers-regex=\b(\d*[.]?\d+)\b
-keywords-list=import,package,public,protected,private,abstract,static,final,class,extends,implements,break,continue,do,for,while,if,else,float,int,void,boolean,true,false,return,struct,foreach,try,throw,new,catch,finally,synchronized,TODO,instnaceof
+keywords-list=import,package,public,protected,private,abstract,static,final,class,extends,implements,break,continue,do,for,while,if,else,float,int,void,boolean,true,false,return,struct,foreach,try,throw,new,catch,finally,synchronized,TODO,instanceof
 builtins-list=print,println,this,super,printStackTrace,close,open,show,close,writeBytes,valueOf,toString
 comments-regex=/\*(?:.|[\n\r])*?\*/|//.*
