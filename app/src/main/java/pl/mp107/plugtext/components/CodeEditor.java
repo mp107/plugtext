@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -20,9 +21,13 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import pl.mp107.plugtext.exceptions.RegexCreatorException;
+import pl.mp107.plugtext.utils.RegexCreatorUtil;
 
 public class CodeEditor extends AppCompatEditText {
     public interface OnTextChangedListener {
@@ -52,6 +57,8 @@ public class CodeEditor extends AppCompatEditText {
                     "not|dFdx|dFdy|fwidth|texture2D|texture2DProj|texture2DLod|" +
                     "texture2DProjLod|textureCube|textureCubeLod)\\b")*/;
     private Pattern patternComments = null/*Pattern.compile(
+            "/\\*(?:.|[\\n\\r])*?\\*//*|//.*")*/;
+    private Pattern patternSearchedString = null/*Pattern.compile(
             "/\\*(?:.|[\\n\\r])*?\\*//*|//.*")*/;
     private Pattern PATTERN_TRAILING_WHITE_SPACE = Pattern.compile(
             "[\\t ]+$",
@@ -88,6 +95,7 @@ public class CodeEditor extends AppCompatEditText {
     private int colorPreprocessors;
     private int colorBuiltin;
     private int colorComment;
+    private int colorSearch = Color.RED;
     private int tabWidthInCharacters = 0;
     private int tabWidth = 0;
 
@@ -307,7 +315,8 @@ public class CodeEditor extends AppCompatEditText {
     }
 
     private void setSyntaxColors() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("settings", Context.MODE_MULTI_PROCESS);;
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("settings", Context.MODE_MULTI_PROCESS);
+        ;
 
         int newBackgroundColor = sharedPreferences.getInt("editor_background_color", Integer.MIN_VALUE);
         int newBuiltinsColor = sharedPreferences.getInt("editor_builtins_color", Integer.MIN_VALUE);
@@ -399,6 +408,15 @@ public class CodeEditor extends AppCompatEditText {
                 for (Matcher m = patternComments.matcher(e); m.find(); ) {
                     e.setSpan(
                             new ForegroundColorSpan(colorComment),
+                            m.start(),
+                            m.end(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
+            if (patternSearchedString != null)
+                for (Matcher m = patternSearchedString.matcher(e); m.find(); ) {
+                    e.setSpan(
+                            new ForegroundColorSpan(colorSearch),
                             m.start(),
                             m.end(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -598,6 +616,7 @@ public class CodeEditor extends AppCompatEditText {
     public void setColorComment(int colorComment) {
         this.colorComment = colorComment;
     }
+
     public int getColorBackground() {
         int color = Color.TRANSPARENT;
         Drawable background = getBackground();
@@ -673,6 +692,19 @@ public class CodeEditor extends AppCompatEditText {
 
     public void setPatternComments(Pattern patternComments) {
         this.patternComments = patternComments;
+    }
+
+    public void setSearchedString(@Nullable String string) {
+        if (string == null) {
+            patternSearchedString = null;
+        } else {
+            try {
+                patternSearchedString = Pattern.compile(RegexCreatorUtil.createStringSearchRegexFromString(string));
+            } catch (RegexCreatorException e) {
+                Log.w("Editor", "RegexCreatorException");
+            }
+        }
+        refreshSyntaxHighlight();
     }
 
     public void refreshSyntaxHighlight() {

@@ -19,6 +19,8 @@ import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.rustamg.filedialogs.FileDialog;
@@ -86,6 +88,47 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        final MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        final SearchView searchView =
+                (SearchView) searchMenuItem.getActionView();
+
+        searchView.setQueryHint(getResources().getString(R.string.action_search));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
+                codeEditor.setSearchedString(query);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Toast.makeText(getBaseContext(), newText, Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
+
+        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                searchView.setFocusable(true);
+                searchView.requestFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                codeEditor.setSearchedString(null);
+                return true;
+            }
+        });
+        //searchView.setOn
         return true;
     }
 
@@ -118,7 +161,7 @@ public class MainActivity extends AppCompatActivity
                 // TODO
                 return true;
             case R.id.action_search:
-                Toast.makeText(MainActivity.this, R.string.action_search, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, R.string.action_search, Toast.LENGTH_SHORT).show();
                 // TODO
                 return true;
             case R.id.action_language:
