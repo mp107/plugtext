@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     private boolean mStoragePermissionsGranted;
     private SharedPreferences sharedPreferences;
     private static final String TAG = "MainActivity";
+    private SearchView searchView;
+    private MenuItem searchMenuItem;
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -79,7 +82,8 @@ public class MainActivity extends AppCompatActivity
         final MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         final SearchView searchView =
                 (SearchView) searchMenuItem.getActionView();
-
+        this.searchMenuItem = searchMenuItem;
+        this.searchView = searchView;
         searchView.setQueryHint(getResources().getString(R.string.action_search));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -135,25 +139,74 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 return true;
             case R.id.action_open_file:
-                onOpenDialogClick();
+                handleOpenMenuButtonClick();
                 return true;
             case R.id.action_save_file:
-                onSaveDialogClick();
+                handleSaveMenuButtonClick();
                 return true;
             case R.id.action_back:
-                codeEditor.goBackInHistory();
+                handleBackMenuButtonClick();
                 return true;
             case R.id.action_forward:
-                codeEditor.goForwardInHistory();
+                handleForwardMenuButtonClick();
                 return true;
             case R.id.action_search:
                 return true;
             case R.id.action_language:
-                showLanguagesSelectingIntent();
+                handleLanguageMenuButtonClick();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void handleOpenMenuButtonClick() {
+        onOpenDialogClick();
+    }
+
+    private void handleSaveMenuButtonClick() {
+        onSaveDialogClick();
+    }
+
+    private void handleBackMenuButtonClick() {
+        codeEditor.goBackInHistory();
+    }
+
+    private void handleForwardMenuButtonClick() {
+        codeEditor.goForwardInHistory();
+    }
+
+    private void handleLanguageMenuButtonClick() {
+        showLanguagesSelectingIntent();
+    }
+
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        /* Handle key combo */
+        if (event.getAction() == KeyEvent.ACTION_DOWN &&
+                event.isCtrlPressed()) {
+            final int keyCode = event.getKeyCode();
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_F:
+                    searchMenuItem.expandActionView();
+                    break;
+                case KeyEvent.KEYCODE_L:
+                    handleLanguageMenuButtonClick();
+                    break;
+                case KeyEvent.KEYCODE_O:
+                    handleOpenMenuButtonClick();
+                    break;
+                case KeyEvent.KEYCODE_S:
+                    handleSaveMenuButtonClick();
+                    break;
+                case KeyEvent.KEYCODE_Y:
+                    handleForwardMenuButtonClick();
+                    break;
+                case KeyEvent.KEYCODE_Z:
+                    handleBackMenuButtonClick();
+                    break;
+            }
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     private void showLanguagesSelectingIntent() {
@@ -298,6 +351,7 @@ public class MainActivity extends AppCompatActivity
             if (fis.read(b) == -1)
                 throw new IOException();
             fis.close();
+            codeEditor.refreshHistory();
             codeEditor.setText(new String(b));
         } catch (Exception e) {
             codeEditor.setText("");

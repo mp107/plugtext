@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Selection;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextWatcher;
@@ -22,9 +23,6 @@ import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,10 +88,8 @@ public class CodeEditor extends AppCompatEditText {
 
     private OnTextChangedListener onTextChangedListener;
     private int updateDelay = 1000;
-    private int errorLine = 0;
     private boolean dirty = false;
     private boolean modified = true;
-    private int colorError;
     private int colorNumber;
     private int colorKeyword;
     private int colorPreprocessors;
@@ -102,7 +98,9 @@ public class CodeEditor extends AppCompatEditText {
     private int colorSearch = Color.RED;
     private int tabWidthInCharacters = 0;
     private int tabWidth = 0;
-    private Stack<String> changesHistory = new Stack<String>();
+    private HistoryItem[] changesHistory = new HistoryItem[8];
+    private int changesHistoryIndex = 0;
+    private boolean isRightAfterHistoryRestore = false;
 
     public CodeEditor(Context context) {
         super(context);
@@ -135,24 +133,6 @@ public class CodeEditor extends AppCompatEditText {
         return PATTERN_TRAILING_WHITE_SPACE
                 .matcher(getText())
                 .replaceAll("");
-    }
-
-    private void removeUniform(Editable e, String statement) {
-        if (statement == null) {
-            return;
-        }
-
-        String regex = "^(" + statement.replace(" ", "[ \\t]+");
-        int p = regex.indexOf(";");
-        if (p > -1) {
-            regex = regex.substring(0, p);
-        }
-        regex += ".*\\n)$";
-
-        Matcher m = Pattern.compile(regex, Pattern.MULTILINE).matcher(e);
-        if (m.find()) {
-            e.delete(m.start(), m.end());
-        }
     }
 
     private void init(Context context) {
@@ -250,16 +230,43 @@ public class CodeEditor extends AppCompatEditText {
 
 
     public void goBackInHistory() {
-        // TODO
+        if (changesHistoryIndex > 1) {
+            changesHistoryIndex--;
+            changesHistoryIndex--;
+            HistoryItem historyItem = changesHistory[changesHistoryIndex];
+            isRightAfterHistoryRestore = true;
+            setText(historyItem.getText());
+            setSelection(historyItem.getCursorPostition());
+            changesHistoryIndex++;
+        }
     }
 
     public void goForwardInHistory() {
-        // TODO
+        if (changesHistoryIndex < changesHistory.length) {
+            HistoryItem historyItem = changesHistory[changesHistoryIndex];
+            if (historyItem != null) {
+                isRightAfterHistoryRestore = true;
+                setText(historyItem.getText());
+                setSelection(historyItem.getCursorPostition());
+                changesHistoryIndex++;
+            }
+        }
     }
 
     private void highlightWithoutChange(Editable e) {
+        if (!isRightAfterHistoryRestore) {
+            if (changesHistoryIndex < changesHistory.length) {
+                changesHistory[changesHistoryIndex] = new HistoryItem(e.toString(), getSelectionStart());
+                changesHistoryIndex++;
+            } else {
+                for (int i = 0; i < changesHistory.length - 1; i++) {
+                    changesHistory[i] = changesHistory[i + 1];
+                }
+                changesHistory[changesHistory.length - 1] = new HistoryItem(e.toString(), getSelectionStart());
+            }
+        }
+        isRightAfterHistoryRestore = false;
         modified = false;
-        // TODO - back/forward
         highlight(e);
         modified = true;
     }
@@ -274,19 +281,6 @@ public class CodeEditor extends AppCompatEditText {
                 return e;
             }
 
-            if (errorLine > 0) {
-                Matcher m = patternLine.matcher(e);
-
-                for (int i = errorLine; i-- > 0 && m.find(); ) {
-                    // {} because analyzers don't like for (); statements
-                }
-
-                e.setSpan(
-                        new BackgroundColorSpan(colorError),
-                        m.start(),
-                        m.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
             if (patternNumbers != null)
                 for (Matcher m = patternNumbers.matcher(e); m.find(); ) {
                     e.setSpan(
@@ -627,6 +621,11 @@ public class CodeEditor extends AppCompatEditText {
 
     public void refreshSyntaxHighlight() {
         setText(getCleanText());
+    }
+
+    public void refreshHistory() {
+        changesHistory = new HistoryItem[5];
+        changesHistoryIndex = -1;
     }
 
 }
