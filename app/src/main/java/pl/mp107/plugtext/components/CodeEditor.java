@@ -608,7 +608,6 @@ public class CodeEditor extends AppCompatEditText {
                 Log.w(TAG, "RegexCreatorException");
             }
         }
-        refreshSyntaxHighlight();
     }
 
     public void refreshSyntaxHighlight() {

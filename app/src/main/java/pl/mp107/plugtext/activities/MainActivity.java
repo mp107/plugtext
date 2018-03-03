@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity
             public boolean onQueryTextSubmit(String query) {
                 //Toast.makeText(getBaseContext(), query, Toast.LENGTH_LONG).show();
                 codeEditor.setSearchedString(query);
+                codeEditor.refreshSyntaxHighlight();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
 
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 codeEditor.setSearchedString(null);
+                codeEditor.refreshSyntaxHighlight();
                 return true;
             }
         });
@@ -150,7 +152,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_search:
                 return true;
             case R.id.action_language:
-                Toast.makeText(MainActivity.this, R.string.language, Toast.LENGTH_SHORT).show();
                 showLanguagesSelectingIntent();
                 return true;
             default:
