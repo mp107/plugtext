@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
-        //searchView.setOn
         return true;
     }
 
