@@ -14,7 +14,6 @@ import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
@@ -110,10 +109,6 @@ public class CodeEditor extends AppCompatEditText {
         init(context);
     }
 
-    public void setOnTextChangedListener(OnTextChangedListener listener) {
-        onTextChangedListener = listener;
-    }
-
     public void setUpdateDelay(int ms) {
         updateDelay = ms;
     }
@@ -127,95 +122,14 @@ public class CodeEditor extends AppCompatEditText {
         tabWidth = Math.round(getPaint().measureText("m") * characters);
     }
 
-    public boolean hasErrorLine() {
-        return errorLine > 0;
-    }
-
-    public void setErrorLine(int line) {
-        errorLine = line;
-    }
-
-    public void updateHighlighting() {
-        highlightWithoutChange(getText());
-    }
-
     public boolean isModified() {
         return dirty;
-    }
-
-    public void setTextHighlighted(CharSequence text) {
-        if (text == null) {
-            text = "";
-        }
-
-        cancelUpdate();
-
-        errorLine = 0;
-        dirty = false;
-
-        modified = false;
-        setText(highlight(new SpannableStringBuilder(text)));
-        modified = true;
-
-        if (onTextChangedListener != null) {
-            onTextChangedListener.onTextChanged(text.toString());
-        }
     }
 
     public String getCleanText() {
         return PATTERN_TRAILING_WHITE_SPACE
                 .matcher(getText())
                 .replaceAll("");
-    }
-
-    public void insertTab() {
-        int start = getSelectionStart();
-        int end = getSelectionEnd();
-
-        getText().replace(
-                Math.min(start, end),
-                Math.max(start, end),
-                "\t",
-                0,
-                1);
-    }
-
-    public void addUniform(String statement) {
-        if (statement == null) {
-            return;
-        }
-
-        Editable e = getText();
-        removeUniform(e, statement);
-
-        Matcher m = PATTERN_INSERT_UNIFORM.matcher(e);
-        int start = -1;
-
-        while (m.find()) {
-            start = m.end();
-        }
-
-        if (start > -1) {
-            // add line break before statement because it's
-            // inserted before the last line-break
-            statement = "\n" + statement;
-        } else {
-            // add a line break after statement if there's no
-            // uniform already
-            statement += "\n";
-
-            // add an empty line between the last #endif
-            // and the now following uniform
-            if ((start = endIndexOfLastEndIf(e)) > -1) {
-                statement = "\n" + statement;
-            }
-
-            // move index past line break or to the start
-            // of the text when no #endif was found
-            ++start;
-        }
-
-        e.insert(start, statement);
     }
 
     private void removeUniform(Editable e, String statement) {
@@ -234,17 +148,6 @@ public class CodeEditor extends AppCompatEditText {
         if (m.find()) {
             e.delete(m.start(), m.end());
         }
-    }
-
-    private int endIndexOfLastEndIf(Editable e) {
-        Matcher m = PATTERN_ENDIF.matcher(e);
-        int idx = -1;
-
-        while (m.find()) {
-            idx = m.end();
-        }
-
-        return idx;
     }
 
     private void init(Context context) {
