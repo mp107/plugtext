@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import pl.mp107.plugtext.R;
+import pl.mp107.plugtext.constants.SharedPreferencesKeys;
 import pl.mp107.plugtext.db.DatabaseHandler;
 import pl.mp107.plugtext.db.SyntaxSchema;
 import pl.mp107.plugtext.exceptions.ApplicationPluginException;
@@ -203,6 +204,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static class EditorPreferenceFragment extends PreferenceFragment {
 
         private static final String TAG = "EditorPreferenceFrag";
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -213,13 +215,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             /* Handling clicks on preferences */
             /* Colors */
-            setColorPickerBehaviour(sharedPreferences, "editor_background_color");
-            setColorPickerBehaviour(sharedPreferences, "editor_builtins_color");
-            setColorPickerBehaviour(sharedPreferences, "editor_comments_color");
-            setColorPickerBehaviour(sharedPreferences, "editor_keywords_color");
-            setColorPickerBehaviour(sharedPreferences, "editor_normal_text_color");
-            setColorPickerBehaviour(sharedPreferences, "editor_numbers_color");
-            setColorPickerBehaviour(sharedPreferences, "editor_preprocessors_color");
+            setColorPickerBehaviour(sharedPreferences, SharedPreferencesKeys.EDITOR_BACKGROUND_COLOR);
+            setColorPickerBehaviour(sharedPreferences, SharedPreferencesKeys.EDITOR_BUILTINS_COLOR);
+            setColorPickerBehaviour(sharedPreferences, SharedPreferencesKeys.EDITOR_COMMENTS_COLOR);
+            setColorPickerBehaviour(sharedPreferences, SharedPreferencesKeys.EDITOR_KEYWORDS_COLOR);
+            setColorPickerBehaviour(sharedPreferences, SharedPreferencesKeys.EDITOR_NORMAL_TEXT_COLOR);
+            setColorPickerBehaviour(sharedPreferences, SharedPreferencesKeys.EDITOR_NUMBERS_COLOR);
+            setColorPickerBehaviour(sharedPreferences, SharedPreferencesKeys.EDITOR_PREPROCESSORS_COLOR);
             /* DB Update */
             Preference pref = (Preference) findPreference("editor_plugin_db_update");
             pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -296,10 +298,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                             )
                                     );
                                     Log.i(TAG, "PluginUpdater - Plugin " + plugin.getName() + " has been loaded successfully");
-                                } catch (ApplicationPluginException e) {
-                                    Log.i(TAG, "PluginUpdater - Plugin loading failed (ApplicationPluginException)");
-                                } catch (NullPointerException e) {
-                                    Log.i(TAG, "PluginUpdater - Plugin loading failed (NullPointerException)");
+                                } catch (ApplicationPluginException | NullPointerException e) {
+                                    if (e instanceof ApplicationPluginException) {
+                                        Log.i(TAG, "PluginUpdater - Plugin loading failed (ApplicationPluginException)");
+                                    }
+                                    if (e instanceof NullPointerException) {
+                                        Log.i(TAG, "PluginUpdater - Plugin loading failed (NullPointerException)");
+                                    }
                                 }
                             }
                         }

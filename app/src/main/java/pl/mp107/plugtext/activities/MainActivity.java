@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -30,18 +28,18 @@ import com.rustamg.filedialogs.SaveFileDialog;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import pl.mp107.plugtext.R;
 import pl.mp107.plugtext.components.CodeEditor;
 import pl.mp107.plugtext.constants.DefaultSyntaxHighlightColors;
+import pl.mp107.plugtext.constants.SharedPreferencesKeys;
 import pl.mp107.plugtext.db.DatabaseHandler;
 import pl.mp107.plugtext.db.SyntaxSchema;
+import pl.mp107.plugtext.utils.PluginManagerUtil;
 
 public class MainActivity extends AppCompatActivity
         implements FileDialog.OnFileSelectedListener {
@@ -62,26 +60,14 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences("settings", Context.MODE_MULTI_PROCESS);
 
-        if (!sharedPreferences.getBoolean("first_run", false)) {
+        if (!sharedPreferences.getBoolean(SharedPreferencesKeys.FIRST_RUN_KEY_VERSION_1, false)) {
             storageInit();
             initializePluginsDirectory();
-            sharedPreferences.edit().putBoolean("first_run", true).apply();
+            sharedPreferences.edit().putBoolean(SharedPreferencesKeys.FIRST_RUN_KEY_VERSION_1, true).apply();
         }
 
         codeEditor = (CodeEditor) findViewById(R.id.editor);
         codeEditor.setText("");
-/*
-        try {
-            Resources res = getResources();
-            InputStream in_s = res.openRawResource(R.raw.java_code);
-            byte[] b = new byte[in_s.available()];
-            if (in_s.read(b) == -1)
-                throw new IOException();
-            codeEditor.setText(new String(b));
-        } catch (Exception e) {
-            Toast.makeText(this, R.string.file_saving_failed, Toast.LENGTH_LONG).show();
-        }
-*/
         mStoragePermissionsGranted = checkStoragePermissions();
     }
 
@@ -213,14 +199,12 @@ public class MainActivity extends AppCompatActivity
         } else {
             String patternBuiltinsString = schema.getPatternBuiltins();
             String patternCommentsString = schema.getPatternComments();
-            String patternFileExtensionString = schema.getPatternFileExtensions();
             String patternKeywordsString = schema.getPatternKeywords();
             String patternNumbersString = schema.getPatternNumbers();
             String patternPreprocessorsString = schema.getPatternPreprocessors();
 
             Pattern patternBuiltins = null;
             Pattern patternComments = null;
-            Pattern patternFileExtension = null;
             Pattern patternKeywords = null;
             Pattern patternNumbers = null;
             Pattern patternPreprocessors = null;
@@ -228,8 +212,6 @@ public class MainActivity extends AppCompatActivity
                 patternBuiltins = Pattern.compile(patternBuiltinsString);
             if (patternCommentsString != null && !patternCommentsString.equals(""))
                 patternComments = Pattern.compile(patternCommentsString);
-            if (patternFileExtensionString != null && !patternFileExtensionString.equals(""))
-                patternFileExtension = Pattern.compile(patternFileExtensionString);
             if (patternKeywordsString != null && !patternKeywordsString.equals(""))
                 patternKeywords = Pattern.compile(patternKeywordsString);
             if (patternNumbersString != null && !patternNumbersString.equals(""))
@@ -357,13 +339,20 @@ public class MainActivity extends AppCompatActivity
         int oldNumbersColor = codeEditor.getColorNumber();
         int oldPreprocessorsColor = codeEditor.getColorPreprocessors();
 
-        int newBackgroundColor = sharedPreferences.getInt("editor_background_color", Integer.MIN_VALUE);
-        int newBuiltinsColor = sharedPreferences.getInt("editor_builtins_color", Integer.MIN_VALUE);
-        int newCommentsColor = sharedPreferences.getInt("editor_comments_color", Integer.MIN_VALUE);
-        int newKeywordsColor = sharedPreferences.getInt("editor_keywords_color", Integer.MIN_VALUE);
-        int newNormalTextColor = sharedPreferences.getInt("editor_normal_text_color", Integer.MIN_VALUE);
-        int newNumbersColor = sharedPreferences.getInt("editor_numbers_color", Integer.MIN_VALUE);
-        int newPreprocessorsColor = sharedPreferences.getInt("editor_preprocessors_color", Integer.MIN_VALUE);
+        int newBackgroundColor = sharedPreferences.getInt(
+                SharedPreferencesKeys.EDITOR_BACKGROUND_COLOR, Integer.MIN_VALUE);
+        int newBuiltinsColor = sharedPreferences.getInt(
+                SharedPreferencesKeys.EDITOR_BUILTINS_COLOR, Integer.MIN_VALUE);
+        int newCommentsColor = sharedPreferences.getInt(
+                SharedPreferencesKeys.EDITOR_COMMENTS_COLOR, Integer.MIN_VALUE);
+        int newKeywordsColor = sharedPreferences.getInt(
+                SharedPreferencesKeys.EDITOR_KEYWORDS_COLOR, Integer.MIN_VALUE);
+        int newNormalTextColor = sharedPreferences.getInt(
+                SharedPreferencesKeys.EDITOR_NORMAL_TEXT_COLOR, Integer.MIN_VALUE);
+        int newNumbersColor = sharedPreferences.getInt(
+                SharedPreferencesKeys.EDITOR_NUMBERS_COLOR, Integer.MIN_VALUE);
+        int newPreprocessorsColor = sharedPreferences.getInt(
+                SharedPreferencesKeys.EDITOR_PREPROCESSORS_COLOR, Integer.MIN_VALUE);
 /*
         Log.d(TAG, "oldBackgroundColor" + String.format("#%06X", 0xFFFFFF & oldBackgroundColor));
         Log.d(TAG, "newBackgroundColor" + String.format("#%06X", 0xFFFFFF & newBackgroundColor));
@@ -380,20 +369,39 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "oldPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & oldPreprocessorsColor));
         Log.d(TAG, "newPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & newPreprocessorsColor));
 */
-        if (newBackgroundColor != oldBackgroundColor
-                || newBuiltinsColor != oldBuiltinsColor
-                || newCommentsColor != oldCommentsColor
-                || newKeywordsColor != oldKeywordsColor
-                || newNormalTextColor != oldNormalTextColor
-                || newNumbersColor != oldNumbersColor
-                || newPreprocessorsColor != oldPreprocessorsColor) {
+        boolean colorsChanged = false;
+        // Check if colors have change and replace if so
+        if (newBackgroundColor != oldBackgroundColor) {
             codeEditor.setColorBackground(newBackgroundColor);
+            colorsChanged = true;
+        }
+        if (newBuiltinsColor != oldBuiltinsColor) {
             codeEditor.setColorBuiltin(newBuiltinsColor);
+            colorsChanged = true;
+        }
+        if (newCommentsColor != oldCommentsColor) {
             codeEditor.setColorComment(newCommentsColor);
+            colorsChanged = true;
+        }
+        if (newKeywordsColor != oldKeywordsColor) {
             codeEditor.setColorKeyword(newKeywordsColor);
+            colorsChanged = true;
+        }
+        if (newNormalTextColor != oldNormalTextColor) {
             codeEditor.setColorNormalText(newNormalTextColor);
+            colorsChanged = true;
+        }
+        if (newNumbersColor != oldNumbersColor) {
             codeEditor.setColorNumber(newNumbersColor);
+            colorsChanged = true;
+        }
+        if (newPreprocessorsColor != oldPreprocessorsColor) {
             codeEditor.setColorPreprocessors(newPreprocessorsColor);
+            colorsChanged = true;
+        }
+
+        // Refresh syntax highlighting if any color have changed
+        if (colorsChanged) {
             codeEditor.refreshSyntaxHighlight();
             //Log.d(TAG, "Syntax colors changed: true");
         }/* else
@@ -402,58 +410,17 @@ public class MainActivity extends AppCompatActivity
 
     private void storageInit() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("editor_background_color", DefaultSyntaxHighlightColors.editor_background_color);
-        editor.putInt("editor_builtins_color", DefaultSyntaxHighlightColors.editor_builtins_color);
-        editor.putInt("editor_comments_color", DefaultSyntaxHighlightColors.editor_comments_color);
-        editor.putInt("editor_keywords_color", DefaultSyntaxHighlightColors.editor_keywords_color);
-        editor.putInt("editor_normal_text_color", DefaultSyntaxHighlightColors.editor_normal_text_color);
-        editor.putInt("editor_numbers_color", DefaultSyntaxHighlightColors.editor_numbers_color);
-        editor.putInt("editor_preprocessors_color", DefaultSyntaxHighlightColors.editor_preprocessors_color);
+        editor.putInt(SharedPreferencesKeys.EDITOR_BACKGROUND_COLOR, DefaultSyntaxHighlightColors.editor_background_color);
+        editor.putInt(SharedPreferencesKeys.EDITOR_BUILTINS_COLOR, DefaultSyntaxHighlightColors.editor_builtins_color);
+        editor.putInt(SharedPreferencesKeys.EDITOR_COMMENTS_COLOR, DefaultSyntaxHighlightColors.editor_comments_color);
+        editor.putInt(SharedPreferencesKeys.EDITOR_KEYWORDS_COLOR, DefaultSyntaxHighlightColors.editor_keywords_color);
+        editor.putInt(SharedPreferencesKeys.EDITOR_NORMAL_TEXT_COLOR, DefaultSyntaxHighlightColors.editor_normal_text_color);
+        editor.putInt(SharedPreferencesKeys.EDITOR_NUMBERS_COLOR, DefaultSyntaxHighlightColors.editor_numbers_color);
+        editor.putInt(SharedPreferencesKeys.EDITOR_PREPROCESSORS_COLOR, DefaultSyntaxHighlightColors.editor_preprocessors_color);
         editor.apply();
     }
 
     private void initializePluginsDirectory() {
-        /* Create plugins directory */
-        try {
-            String destinationDirectoryPath = getExternalFilesDir(null).getCanonicalPath() + "/plugins";
-            File sourceDirectory = new File(destinationDirectoryPath);
-            File destinationDirectory = new File(destinationDirectoryPath);
-
-            Log.i(TAG, "PluginLoader - Trying to create plugin directory in " + destinationDirectoryPath);
-            /* Create directory if not exists or is not a directory */
-            if (!destinationDirectory.exists() || !destinationDirectory.isDirectory()) {
-                destinationDirectory.mkdirs();
-            }
-            AssetManager assetManager = getAssets();
-            String[] sourcePluginsPaths = getAssets().list("plugins");
-            String destinationPluginFilePath = "";
-            /* For any of the source plugin files... */
-            for (String sourcePluginPath : sourcePluginsPaths) {
-                sourcePluginPath = "plugins/" + sourcePluginPath;
-                try {
-                    /* Read source file */
-                    File file = new File(sourcePluginPath);
-                    Log.i(TAG, "PluginLoader - Loading raw Asset: " + sourcePluginPath);
-                    InputStream is = getAssets().open(sourcePluginPath);
-                    byte[] b = new byte[is.available()];
-                    if (is.read(b) == -1)
-                        throw new IOException();
-                    is.close();
-                    /* Write content to destination file */
-                    destinationPluginFilePath = destinationDirectory + "/" + file.getName();
-                    Log.i(TAG, "PluginLoader - Writing raw Asset: " + destinationPluginFilePath);
-                    FileOutputStream out = new FileOutputStream(destinationPluginFilePath);
-                    out.write(b);
-                    out.flush();
-                    out.close();
-                } catch (IOException e) {
-                    Log.w(TAG, "PluginLoader - Plugin loading failed (IOExcpetion)");
-                }
-            }
-        } catch (IOException e) {
-            Log.i(TAG, "PluginLoader - Directory creeating failed (IOExcpetion)");
-        } catch (NullPointerException e) {
-            Log.i(TAG, "PluginLoader - Directory creeating failed (NullPointerException)");
-        }
+        PluginManagerUtil.initializePluginsDirectory(this);
     }
 }
