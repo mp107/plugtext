@@ -74,7 +74,7 @@ public abstract class TextFileApplicationPluginUtil {
             throw new ApplicationPluginException(
                     Resources.getSystem().getString(R.string.plugin_api_version_mismatch));
         }
-        return null; //TODO - is it ok?
+        return null;
     }
 
     private static Map<String, String> parseTextIntoMap(String content)

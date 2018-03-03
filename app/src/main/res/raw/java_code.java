@@ -73,7 +73,6 @@ public abstract class BasicConnectionThread extends Thread {
                 }
                 receive2(new Command(line));
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 System.err.println("Błąd połączenia:");
                 e.printStackTrace();
                 closeConnection();
