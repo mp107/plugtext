@@ -17,6 +17,8 @@ import pl.mp107.plugtext.plugins.TextFileApplicationPlugin;
 
 public abstract class TextFileApplicationPluginUtil {
 
+    private static final String TAG = "TFAPUtil";
+
     public static TextFileApplicationPlugin createTextFileApplicationPluginFromString(String content)
             throws ApplicationPluginException {
         Map<String, String> pluginConfig = parseTextIntoMap(content);
@@ -83,7 +85,7 @@ public abstract class TextFileApplicationPluginUtil {
         Scanner scanner = new Scanner(content);
         while (scanner.hasNextLine()) {
             line = scanner.nextLine();
-            //Log.d("TFAPUtil", "Scaning line: " + line);
+            //Log.d(TAG, "Scaning line: " + line);
             /* If line is not empty and does not start with # (comment) */
             if (!line.isEmpty() && !line.startsWith("#")) {
                 separatorPosition = line.indexOf("=");
@@ -92,7 +94,7 @@ public abstract class TextFileApplicationPluginUtil {
                     value = line.substring(separatorPosition + 1);
                     pluginConfig.put(name, value);
                 } else {
-                    //Log.w("TFAPUtil", "");
+                    //Log.w(TAG, "");
                     throw new ApplicationPluginException("Error in plugin syntax"/*
                             Resources.getSystem().getString(R.string.plugin_file_parsing_exception)*/);
 

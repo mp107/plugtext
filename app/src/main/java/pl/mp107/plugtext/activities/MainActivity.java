@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private CodeEditor codeEditor;
     private boolean mStoragePermissionsGranted;
     private SharedPreferences sharedPreferences;
+    private static final String TAG = "MainActivity";
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -161,8 +162,6 @@ public class MainActivity extends AppCompatActivity
                 // TODO
                 return true;
             case R.id.action_search:
-                //Toast.makeText(MainActivity.this, R.string.action_search, Toast.LENGTH_SHORT).show();
-                // TODO
                 return true;
             case R.id.action_language:
                 Toast.makeText(MainActivity.this, R.string.language, Toast.LENGTH_SHORT).show();
@@ -246,11 +245,11 @@ public class MainActivity extends AppCompatActivity
             codeEditor.setPatternPreprocessors(patternPreprocessors);
             codeEditor.refreshSyntaxHighlight();
 /*
-            Log.d("SyntaxSET", "Builtins: " + schema.getPatternBuiltins());
-            Log.d("SyntaxSET", "Comments: " + schema.getPatternComments());
-            Log.d("SyntaxSET", "Keywords: " + schema.getPatternKeywords());
-            Log.d("SyntaxSET", "Numbers: " + schema.getPatternNumbers());
-            Log.d("SyntaxSET", "Preprocessors: " + schema.getPatternPreprocessors());
+            Log.d(TAG, "SyntaxSET Builtins: " + schema.getPatternBuiltins());
+            Log.d(TAG, "SyntaxSET Comments: " + schema.getPatternComments());
+            Log.d(TAG, "SyntaxSET Keywords: " + schema.getPatternKeywords());
+            Log.d(TAG, "SyntaxSET Numbers: " + schema.getPatternNumbers());
+            Log.d(TAG, "SyntaxSET Preprocessors: " + schema.getPatternPreprocessors());
 */
         }
     }
@@ -366,20 +365,20 @@ public class MainActivity extends AppCompatActivity
         int newNumbersColor = sharedPreferences.getInt("editor_numbers_color", Integer.MIN_VALUE);
         int newPreprocessorsColor = sharedPreferences.getInt("editor_preprocessors_color", Integer.MIN_VALUE);
 /*
-        Log.d("DEBUG", "oldBackgroundColor" + String.format("#%06X", 0xFFFFFF & oldBackgroundColor));
-        Log.d("DEBUG", "newBackgroundColor" + String.format("#%06X", 0xFFFFFF & newBackgroundColor));
-        Log.d("DEBUG", "oldBuiltinsColor" + String.format("#%06X", 0xFFFFFF & oldBuiltinsColor));
-        Log.d("DEBUG", "newBuiltinsColor" + String.format("#%06X", 0xFFFFFF & newBuiltinsColor));
-        Log.d("DEBUG", "oldCommentsColor" + String.format("#%06X", 0xFFFFFF & oldCommentsColor));
-        Log.d("DEBUG", "newCommentsColor" + String.format("#%06X", 0xFFFFFF & newCommentsColor));
-        Log.d("DEBUG", "oldKeywordsColor" + String.format("#%06X", 0xFFFFFF & oldKeywordsColor));
-        Log.d("DEBUG", "newKeywordsColor" + String.format("#%06X", 0xFFFFFF & newKeywordsColor));
-        Log.d("DEBUG", "oldNormalTextColor" + String.format("#%06X", 0xFFFFFF & oldNormalTextColor));
-        Log.d("DEBUG", "newNormalTextColor" + String.format("#%06X", 0xFFFFFF & newNormalTextColor));
-        Log.d("DEBUG", "oldNumbersColor" + String.format("#%06X", 0xFFFFFF & oldNumbersColor));
-        Log.d("DEBUG", "newNumbersColor" + String.format("#%06X", 0xFFFFFF & newNumbersColor));
-        Log.d("DEBUG", "oldPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & oldPreprocessorsColor));
-        Log.d("DEBUG", "newPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & newPreprocessorsColor));
+        Log.d(TAG, "oldBackgroundColor" + String.format("#%06X", 0xFFFFFF & oldBackgroundColor));
+        Log.d(TAG, "newBackgroundColor" + String.format("#%06X", 0xFFFFFF & newBackgroundColor));
+        Log.d(TAG, "oldBuiltinsColor" + String.format("#%06X", 0xFFFFFF & oldBuiltinsColor));
+        Log.d(TAG, "newBuiltinsColor" + String.format("#%06X", 0xFFFFFF & newBuiltinsColor));
+        Log.d(TAG, "oldCommentsColor" + String.format("#%06X", 0xFFFFFF & oldCommentsColor));
+        Log.d(TAG, "newCommentsColor" + String.format("#%06X", 0xFFFFFF & newCommentsColor));
+        Log.d(TAG, "oldKeywordsColor" + String.format("#%06X", 0xFFFFFF & oldKeywordsColor));
+        Log.d(TAG, "newKeywordsColor" + String.format("#%06X", 0xFFFFFF & newKeywordsColor));
+        Log.d(TAG, "oldNormalTextColor" + String.format("#%06X", 0xFFFFFF & oldNormalTextColor));
+        Log.d(TAG, "newNormalTextColor" + String.format("#%06X", 0xFFFFFF & newNormalTextColor));
+        Log.d(TAG, "oldNumbersColor" + String.format("#%06X", 0xFFFFFF & oldNumbersColor));
+        Log.d(TAG, "newNumbersColor" + String.format("#%06X", 0xFFFFFF & newNumbersColor));
+        Log.d(TAG, "oldPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & oldPreprocessorsColor));
+        Log.d(TAG, "newPreprocessorsColor" + String.format("#%06X", 0xFFFFFF & newPreprocessorsColor));
 */
         if (newBackgroundColor != oldBackgroundColor
                 || newBuiltinsColor != oldBuiltinsColor
@@ -396,9 +395,9 @@ public class MainActivity extends AppCompatActivity
             codeEditor.setColorNumber(newNumbersColor);
             codeEditor.setColorPreprocessors(newPreprocessorsColor);
             codeEditor.refreshSyntaxHighlight();
-            //Log.d("DEBUG", "Syntax colors changed: true");
+            //Log.d(TAG, "Syntax colors changed: true");
         }/* else
-            Log.d("DEBUG", "Syntax colors changed: false");*/
+            Log.d(TAG, "Syntax colors changed: false");*/
     }
 
     private void storageInit() {
@@ -420,7 +419,7 @@ public class MainActivity extends AppCompatActivity
             File sourceDirectory = new File(destinationDirectoryPath);
             File destinationDirectory = new File(destinationDirectoryPath);
 
-            Log.i("PluginLoader", "Trying to create plugin directory in " + destinationDirectoryPath);
+            Log.i(TAG, "PluginLoader - Trying to create plugin directory in " + destinationDirectoryPath);
             /* Create directory if not exists or is not a directory */
             if (!destinationDirectory.exists() || !destinationDirectory.isDirectory()) {
                 destinationDirectory.mkdirs();
@@ -434,7 +433,7 @@ public class MainActivity extends AppCompatActivity
                 try {
                     /* Read source file */
                     File file = new File(sourcePluginPath);
-                    Log.i("PluginLoader", "Loading raw Asset: " + sourcePluginPath);
+                    Log.i(TAG, "PluginLoader - Loading raw Asset: " + sourcePluginPath);
                     InputStream is = getAssets().open(sourcePluginPath);
                     byte[] b = new byte[is.available()];
                     if (is.read(b) == -1)
@@ -442,19 +441,19 @@ public class MainActivity extends AppCompatActivity
                     is.close();
                     /* Write content to destination file */
                     destinationPluginFilePath = destinationDirectory + "/" + file.getName();
-                    Log.i("PluginLoader", "Writing raw Asset: " + destinationPluginFilePath);
+                    Log.i(TAG, "PluginLoader - Writing raw Asset: " + destinationPluginFilePath);
                     FileOutputStream out = new FileOutputStream(destinationPluginFilePath);
                     out.write(b);
                     out.flush();
                     out.close();
                 } catch (IOException e) {
-                    Log.w("PluginLoader", "Plugin loading failed (IOExcpetion)");
+                    Log.w(TAG, "PluginLoader - Plugin loading failed (IOExcpetion)");
                 }
             }
         } catch (IOException e) {
-            Log.i("PluginLoader", "Directory creeating failed (IOExcpetion)");
+            Log.i(TAG, "PluginLoader - Directory creeating failed (IOExcpetion)");
         } catch (NullPointerException e) {
-            Log.i("PluginLoader", "Directory creeating failed (NullPointerException)");
+            Log.i(TAG, "PluginLoader - Directory creeating failed (NullPointerException)");
         }
     }
 }

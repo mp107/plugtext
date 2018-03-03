@@ -53,6 +53,8 @@ import pl.mp107.plugtext.utils.TextFileApplicationPluginUtil;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    private static final String TAG = "SettingsActivity";
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -199,6 +201,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class EditorPreferenceFragment extends PreferenceFragment {
+
+        private static final String TAG = "EditorPreferenceFrag";
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -224,14 +228,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         String[] additionalDirectories = {
                                 getActivity().getExternalFilesDir(null).getCanonicalPath() + "/plugins"
                         };
-                        Log.d("Updater", "Directories: " + Arrays.toString(additionalDirectories));
+                        Log.d(TAG, "PluginUpdater - Directories: " + Arrays.toString(additionalDirectories));
                         File[] pluginFiles;
                         DatabaseHandler dbHandler = new DatabaseHandler(getActivity());
                         dbHandler.clearDatabase();
                         for (String directoryPath : additionalDirectories) {
                             pluginFiles = getPlugins(directoryPath);
                             for (File pluginFile : pluginFiles) {
-                                Log.d("Updater", "Plugin file: " + pluginFile.getCanonicalPath());
+                                Log.d(TAG, "PluginUpdater - Plugin file: " + pluginFile.getCanonicalPath());
                                 BufferedReader br = new BufferedReader(
                                         new InputStreamReader(
                                                 new FileInputStream(pluginFile), "UTF8"));
@@ -291,16 +295,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                                     plugin.getVersion()
                                             )
                                     );
-                                    Log.i("PluginLoader", "Plugin " + plugin.getName() + " has been loaded successfully");
+                                    Log.i(TAG, "PluginUpdater - Plugin " + plugin.getName() + " has been loaded successfully");
                                 } catch (ApplicationPluginException e) {
-                                    Log.i("PluginLoader", "Plugin loading failed (ApplicationPluginException)");
+                                    Log.i(TAG, "PluginUpdater - Plugin loading failed (ApplicationPluginException)");
                                 } catch (NullPointerException e) {
-                                    Log.i("PluginLoader", "Plugin loading failed (NullPointerException)");
+                                    Log.i(TAG, "PluginUpdater - Plugin loading failed (NullPointerException)");
                                 }
                             }
                         }
                     } catch (IOException e) {
-                        Log.i("PluginLoader", "Plugins loading failed (IOException)");
+                        Log.i(TAG, "PluginUpdater - Plugins loading failed (IOException)");
                     }
                     Toast.makeText(getActivity(), R.string.plugins_loaded_successfully, Toast.LENGTH_LONG).show();
                     return true;

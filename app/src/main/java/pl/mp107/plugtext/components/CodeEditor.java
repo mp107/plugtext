@@ -68,6 +68,7 @@ public class CodeEditor extends AppCompatEditText {
             Pattern.MULTILINE);
     private Pattern PATTERN_ENDIF = Pattern.compile(
             "(#endif)\\b");
+    private static final String TAG = "CodeEditor";
 
     private final Handler updateHandler = new Handler();
     private final Runnable updateRunnable = new Runnable() {
@@ -701,7 +702,7 @@ public class CodeEditor extends AppCompatEditText {
             try {
                 patternSearchedString = Pattern.compile(RegexCreatorUtil.createStringSearchRegexFromString(string));
             } catch (RegexCreatorException e) {
-                Log.w("Editor", "RegexCreatorException");
+                Log.w(TAG, "RegexCreatorException");
             }
         }
         refreshSyntaxHighlight();

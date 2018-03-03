@@ -8,6 +8,8 @@ import java.util.Arrays;
 import pl.mp107.plugtext.exceptions.RegexCreatorException;
 
 public abstract class RegexCreatorUtil {
+
+    private static final String TAG = "RegexCreatorUtil";
     public static String createStringRegexFromString(@NonNull String string)
             throws RegexCreatorException {
         return createStringRegexFromString(string, ",", "\\b", "\\b");
@@ -36,8 +38,8 @@ public abstract class RegexCreatorUtil {
         result.append(")");
         if (afterString != null)
             result.append(afterString);
-        //Log.d("REGEXCreatorUtil", "Input List: " + string);
-        //Log.d("REGEXCreatorUtil", "Created REGEX: " + result.toString());
+        //Log.d(TAG, "REGEXCreatorUtil - Input List: " + string);
+        //Log.d(TAG, "REGEXCreatorUtil - Created REGEX: " + result.toString());
         return result.toString();
     }
 }
