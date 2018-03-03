@@ -22,6 +22,8 @@
     <string name="file_saving_failed">Zapis do pliku nie powiódł się</string>
     <string name="plugins_loaded_successfully">Wtyczki wczytano pomyślnie</string>
     <string name="language_none">Brak</string>
+    <string name="plugin_load_error">Błąd ładowania wtyczki</string>
+    <string name="plugins_load_error">Błąd ładowania wtyczek</string>
 
     <!-- Strings related to Settings -->
 

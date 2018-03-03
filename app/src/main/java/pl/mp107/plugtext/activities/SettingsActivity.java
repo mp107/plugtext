@@ -249,8 +249,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     line = br.readLine();
                                 }
                                 String fileContent = sb.toString();
+                                BaseApplicationPlugin plugin = null;
                                 try {
-                                    BaseApplicationPlugin plugin = TextFileApplicationPluginUtil
+                                    plugin = TextFileApplicationPluginUtil
                                             .createTextFileApplicationPluginFromString(fileContent);
                                     // Adding syntax schema to db
                                     Pattern patternBuiltins = plugin.getPatternBuiltins();
@@ -305,13 +306,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                     if (e instanceof NullPointerException) {
                                         Log.i(TAG, "PluginUpdater - Plugin loading failed (NullPointerException)");
                                     }
+                                    if (plugin != null && plugin.getName() != null && !plugin.getName().equals("")) {
+                                        Toast.makeText(getActivity(), R.string.plugin_load_error + "\"" + plugin.getName() + "\"", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             }
                         }
+                        Toast.makeText(getActivity(), R.string.plugins_loaded_successfully, Toast.LENGTH_LONG).show();
                     } catch (IOException e) {
                         Log.i(TAG, "PluginUpdater - Plugins loading failed (IOException)");
+                        Toast.makeText(getActivity(), R.string.plugins_load_error, Toast.LENGTH_LONG).show();
                     }
-                    Toast.makeText(getActivity(), R.string.plugins_loaded_successfully, Toast.LENGTH_LONG).show();
                     return true;
                 }
 

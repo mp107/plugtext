@@ -22,6 +22,8 @@
     <string name="file_saving_failed">File saving failed</string>
     <string name="plugins_loaded_successfully">Plugins reloaded successfully</string>
     <string name="language_none">None</string>
+    <string name="plugin_load_error">Plugin loading error</string>
+    <string name="plugins_load_error">Plugins loading error</string>
 
     <!-- Strings related to Settings -->
 
