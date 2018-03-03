@@ -22,6 +22,9 @@ import android.text.style.ReplacementSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +32,7 @@ import pl.mp107.plugtext.exceptions.RegexCreatorException;
 import pl.mp107.plugtext.utils.RegexCreatorUtil;
 
 public class CodeEditor extends AppCompatEditText {
+
     public interface OnTextChangedListener {
         void onTextChanged(String text);
     }
@@ -98,6 +102,7 @@ public class CodeEditor extends AppCompatEditText {
     private int colorSearch = Color.RED;
     private int tabWidthInCharacters = 0;
     private int tabWidth = 0;
+    private Stack<String> changesHistory = new Stack<String>();
 
     public CodeEditor(Context context) {
         super(context);
@@ -243,8 +248,18 @@ public class CodeEditor extends AppCompatEditText {
         updateHandler.removeCallbacks(updateRunnable);
     }
 
+
+    public void goBackInHistory() {
+        // TODO
+    }
+
+    public void goForwardInHistory() {
+        // TODO
+    }
+
     private void highlightWithoutChange(Editable e) {
         modified = false;
+        // TODO - back/forward
         highlight(e);
         modified = true;
     }
@@ -613,4 +628,5 @@ public class CodeEditor extends AppCompatEditText {
     public void refreshSyntaxHighlight() {
         setText(getCleanText());
     }
+
 }

@@ -141,12 +141,10 @@ public class MainActivity extends AppCompatActivity
                 onSaveDialogClick();
                 return true;
             case R.id.action_back:
-                Toast.makeText(MainActivity.this, R.string.action_back, Toast.LENGTH_SHORT).show();
-                // TODO
+                codeEditor.goBackInHistory();
                 return true;
             case R.id.action_forward:
-                Toast.makeText(MainActivity.this, R.string.action_forward, Toast.LENGTH_SHORT).show();
-                // TODO
+                codeEditor.goForwardInHistory();
                 return true;
             case R.id.action_search:
                 return true;
